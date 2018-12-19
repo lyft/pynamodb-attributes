@@ -1,0 +1,31 @@
+sudo: false
+language: python
+python:
+  - '3.6'
+cache: pip
+install:
+  - pip install -r requirements.txt
+  - pip install -e .
+before_script:
+  - wget https://s3-us-west-2.amazonaws.com/dynamodb-local/dynamodb_local_latest.tar.gz -O /tmp/dynamodb_local_latest.tar.gz
+  - tar -xzf /tmp/dynamodb_local_latest.tar.gz -C /tmp
+  - java -Djava.library.path=/tmp/DynamoDBLocal_lib -jar /tmp/DynamoDBLocal.jar -inMemory &
+  - sleep 2
+env:
+  - AWS_SECRET_ACCESS_KEY=mock AWS_ACCESS_KEY_ID=mock
+script:
+  - make test
+  - make lint
+jobs:
+  include:
+    - stage: deploy
+      python: '3.6'
+      deploy:
+        provider: pypi
+        user: lyft-pynamodb-attributes
+        password:
+          secure: "YIeKxsGBkiNHlHPzwta2xlPSZmPMrwapxEYMTusYwDFP5OBuoi8JdkwjhG1gcua2TZ0bh+3njHzilIDNv9wXJ9QKQ3T4T/2JWKY3ikISAoiwHjBrvI5AONKpdhQhQyCD4Il2lxKaY6k2oHQbqR2oquJ3aFSe5aO2PtqGfNJBv3lC3njiWiBUhncKeBGXpIkkTzrkNXDyqtnOtSZenn9UZ0J+WBbZDzHyK09cp+CfhHZ5lT8In0hJa2+LFIrEcCBXQxlKFnWfR/P4MDfInUf5xnWfillnVsAAcLpBDBQWkVKNzq7FAZ8UoDKmHH5p9jWQFjT/AuFxLEWhjpxPfrxPRVnmyBr13gzFX1nzO79AaXvxEGEDCSFtBN0RYoF0FUeRkKH5e0Gfvlm5KeOaGcZJ81oazXiDukoiVsBI3xjA2xY4rVWwHqBWngAVoVv6CM9tk82Gq9cjXI44s34sPf3tZXrxrvF+r5HDuab8vec5iTDDknSk1i/SiNP9T/YZOtgI8XfjtP3U7ppTGUYR7eZQFvtk3Hly9IjGMh2F5YyaebhA1qcKNaSsNbVgWgJg+17Exyj6RxdnrWbEX9WrD7YGWO+qnzOso0c00CpudXyQKqtA2vEKqY0RKmxibgwtaiyrSGSzRb1w1spHl0F2t0sLunjXrDCZlQ2PCQvrRatjVUE="
+        on:
+          tags: true
+          distributions: sdist
+          repo: lyft/pynamodb-attributes
