@@ -27,7 +27,7 @@ jobs:
         provider: pypi
         user: lyft-pynamodb-attributes
         password:
-          secure: "VbTg3iGjB54XLcky1JOnphLW1TA44OLD4jl+RoG9M16tGbpvPNvyu4Ni9dRmWE5t8OZe4bu9eEHzph27r8kF+U1A2lVQiZx2FpE9Cx/QKxmGPP/a0O1N3/jP7At57iCQ7qRVVI1lan4fktlbNrim0AL5rZbWQRx0gVJSUqePS5MDPyrihvd5MyUBdWydqL8Eet3K/vZqKGssAhbPynDmgEy/wtkYTt3nplsm57P/GOl7UduZp/+bsd4XHqKfYJJzRqrzXaL1AFi1rDOFsfPh7dpZ5Qgidewvpaybjfl7PI3j5VtivX9KkxxchwR7r4Z2lDFAXgWQkDYZ6Axm16BO+UaAedCZoYNuhDt9gGeB6+5XNRV2otByatxZoiAhhuvIsDguVw6SfjTwAemANiEvNdxQ+rRJPH6oB2d8GuG3lfP+7kadr7LlodW2keWGLgF6c0LbkIBOXEcysmF/sH3rZCvfmypnU+lpArTwjUG8iLv/RT3ThY1AZeXUnWxqNof420ziLecrw28wQDzlW15gdaG3XPj2AZ6WyccJpg21IgDm7jPMsbmXxEFbdvgYAka57XbXDFiGUwQ8Y+IZaV1e3oNPIEyvYL7ts3rFP7lCYVVJY3Kp7mGktnpVaB919/DwRGR7Q999FTK52UoN1PdoPn0dDy+n5qQTFDVh7hRLwb0="
+          secure: "k/WziRKSHiFanZYsu9ayYqZ9eqQbvdot2iw8mb4e0G28ahu5H9fcRMTlIyqpUAFz66aE33pOHG3WL8lcAnaw6RatffLLqVSiW7UTLncnJ1Naxh/8CobEGw3/Gwe8wEZOTGj5QG2c9eEh1YM6Bb3xT0xnxexnHHag3vQoD8wFUfmx05+lJ8+6THDyP1ZpVFx+WFyCNyJfp6493Nkm3Ph5GA4kye/5PQgyq8wh8savxqesp51RN6uEbn+f50upCqMa+gSzrgeo3LFyEUeSos4hk+4rJOV2qpbyTFB7wdOmAX6hfa1nVAY7gIccM4VYfErtkbgGeQf1OM7CtD2iM2wQXAXda5FX/19NfjThg4ccnyP5ubBiaFtAtYw4E+A45yHtl4isjzJpm8Tp5XoRAQN+aBdABKlLPTqG0JE7jLzyOG+T6O7bgz6zWLkzrrrIo2IYD54+gE0SDYEl1OXf43yoq7/NHhGdk5AXsC5doF2qZMglLR89OVFyd5Tz5ORHczet/DGe/pys9b3svLHIeQJ+ZC9bgthNHDQN+13AbpuVDjNYP3wWYe9Oy1fMemZNJhtaD0tg2ZfZPLOnpwJ3kR7bD3As1fuHXuoL3hrIrfx+ZiYdZFUvQO8xKXbWQU/Mr7ld93k9BOi0dcKa3iSTFV7vhhOOXqOAOrTwJ5WIKdeuKeE="
         on:
           tags: true
           distributions: sdist
