@@ -13,4 +13,5 @@ setup(
     install_requires=[
         "pynamodb",
     ],
+    python_requires='>=3',
 )
