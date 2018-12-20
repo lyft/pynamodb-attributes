@@ -12,6 +12,17 @@ from tests.meta import dynamodb_table_meta
 class MyEnum(Enum):
     foo_key = 'foo_value'
     bar_key = 'bar_value'
+    unknown_key = 'unknown_value'
+
+
+class MyEnumWithMissing(Enum):
+    foo_key = 'foo_value'
+    bar_key = 'bar_value'
+    missing_key = 'missing_value'
+
+    @classmethod
+    def _missing_(cls, key):
+        return cls.missing_key
 
 
 class MyModel(Model):
@@ -19,6 +30,8 @@ class MyModel(Model):
 
     key = UnicodeAttribute(hash_key=True)
     value = UnicodeEnumAttribute(MyEnum, null=True)
+    value_with_unknown = UnicodeEnumAttribute(MyEnum, unknown_value=MyEnum.unknown_key, null=True)
+    value_with_missing = UnicodeEnumAttribute(MyEnumWithMissing, null=True)
 
 
 @pytest.fixture(scope='module', autouse=True)
@@ -42,6 +55,30 @@ def test_serialization_invalid_type(uuid_key):
 
     with pytest.raises(TypeError, match="value has invalid type"):
         model.save()
+
+
+def test_serialization_unknown_value_fail(uuid_key):
+    MyModel._get_connection().put_item(uuid_key, attributes={
+        'value': {'S': 'nonexistent_value'},
+    })
+    with pytest.raises(ValueError, match="'nonexistent_value' is not a valid MyEnum"):
+        MyModel.get(uuid_key)
+
+
+def test_serialization_unknown_value_success(uuid_key):
+    MyModel._get_connection().put_item(uuid_key, attributes={
+        'value_with_unknown': {'S': 'nonexistent_value'},
+    })
+    model = MyModel.get(uuid_key)
+    assert model.value_with_unknown == MyEnum.unknown_key
+
+
+def test_serialization_missing_value_success(uuid_key):
+    MyModel._get_connection().put_item(uuid_key, attributes={
+        'value_with_missing': {'S': 'nonexistent_value'},
+    })
+    model = MyModel.get(uuid_key)
+    assert model.value_with_missing == MyEnumWithMissing.missing_key
 
 
 @pytest.mark.parametrize(
