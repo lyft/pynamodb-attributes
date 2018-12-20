@@ -1,9 +1,10 @@
 from datetime import date
+from unittest.mock import ANY
 
 import pytest
+from pynamodb.attributes import UnicodeAttribute
 from pynamodb.models import Model
 
-from pynamodb_attributes import IntegerAttribute
 from pynamodb_attributes.integer_date import IntegerDateAttribute
 from tests.meta import dynamodb_table_meta
 
@@ -11,7 +12,7 @@ from tests.meta import dynamodb_table_meta
 class MyModel(Model):
     Meta = dynamodb_table_meta(__name__)
 
-    id = IntegerAttribute(hash_key=True)  # noqa: A003
+    key = UnicodeAttribute(hash_key=True)
     value = IntegerDateAttribute(null=True)
 
 
@@ -20,33 +21,33 @@ def create_table():
     MyModel.create_table()
 
 
-def test_serialization_non_null():
+def test_serialization_non_null(uuid_key):
     model = MyModel()
-    model.id = 123
+    model.key = uuid_key
     model.value = date(2015, 12, 31)
     model.save()
 
     # verify underlying storage
-    item = MyModel._get_connection().get_item('123')
-    assert item == {'Item': {'id': {'N': '123'}, 'value': {'N': '20151231'}}}
+    item = MyModel._get_connection().get_item(uuid_key)
+    assert item == {'Item': {'key': ANY, 'value': {'N': '20151231'}}}
 
     # verify deserialization
-    model = MyModel.get(123)
+    model = MyModel.get(uuid_key)
     assert model.value.year == 2015
     assert model.value.month == 12
     assert model.value.day == 31
 
 
-def test_serialization_null():
+def test_serialization_null(uuid_key):
     model = MyModel()
-    model.id = 123
+    model.key = uuid_key
     model.value = None
     model.save()
 
     # verify underlying storage
-    item = MyModel._get_connection().get_item('123')
-    assert item == {'Item': {'id': {'N': '123'}}}
+    item = MyModel._get_connection().get_item(uuid_key)
+    assert 'value' not in item['Item']
 
     # verify deserialization
-    model = MyModel.get(123)
+    model = MyModel.get(uuid_key)
     assert model.value is None

@@ -1,7 +1,8 @@
 from typing import NamedTuple
+from unittest.mock import ANY
 
 import pytest
-from pynamodb.attributes import NumberAttribute
+from pynamodb.attributes import UnicodeAttribute
 from pynamodb.models import Model
 
 from pynamodb_attributes import UnicodeDelimitedTupleAttribute
@@ -22,24 +23,24 @@ def create_table():
 class MyModel(Model):
     Meta = dynamodb_table_meta(__name__)
 
-    id = NumberAttribute(hash_key=True)  # noqa: A003
+    key = UnicodeAttribute(hash_key=True)
     default_delimiter = UnicodeDelimitedTupleAttribute(MyTuple, null=True)
     custom_delimiter = UnicodeDelimitedTupleAttribute(MyTuple, delimiter='.', null=True)
     untyped = UnicodeDelimitedTupleAttribute(tuple, null=True)
 
 
-def test_serialization_containing_delimiter():
+def test_serialization_containing_delimiter(uuid_key):
     model = MyModel()
-    model.id = 123
+    model.key = uuid_key
     model.default_delimiter = MyTuple(country="U::S", city="San Francisco")
 
     with pytest.raises(ValueError):
         model.save()
 
 
-def test_serialization_containing_custom_delimiter():
+def test_serialization_containing_custom_delimiter(uuid_key):
     model = MyModel()
-    model.id = 123
+    model.key = uuid_key
     model.custom_delimiter = MyTuple(country="U.S.", city="San Francisco")
 
     with pytest.raises(ValueError):
@@ -49,22 +50,22 @@ def test_serialization_containing_custom_delimiter():
     model.save()
 
 
-def test_serialization_invalid_type():
+def test_serialization_invalid_type(uuid_key):
     model = MyModel()
-    model.id = 123
+    model.key = uuid_key
     model.default_delimiter = (1, 2, 3)
 
     with pytest.raises(TypeError):
         model.save()
 
 
-def test_serialization_typing():
+def test_serialization_typing(uuid_key):
     model = MyModel()
-    model.id = 123
+    model.key = uuid_key
     model.default_delimiter = MyTuple('US', 'San Francisco', 94107)
     model.save()
 
-    model = MyModel.get(123)
+    model = MyModel.get(uuid_key)
     assert model.default_delimiter.country == 'US'
     assert model.default_delimiter.city == 'San Francisco'
     assert model.default_delimiter.zip_code == 94107  # note the type
@@ -89,19 +90,19 @@ def test_serialization_typing():
         ),
     ],
 )
-def test_serialization(expected_attributes, value):
+def test_serialization(expected_attributes, value, uuid_key):
     model = MyModel()
-    model.id = 123
+    model.key = uuid_key
     model.default_delimiter = value
     model.custom_delimiter = value
     model.save()
 
     # verify underlying storage
-    item = MyModel._get_connection().get_item('123')
-    assert item == {'Item': {'id': {'N': '123'}, **expected_attributes}}
+    item = MyModel._get_connection().get_item(uuid_key)
+    assert item == {'Item': {'key': ANY, **expected_attributes}}
 
     # verify deserialization
-    model = MyModel.get(123)
+    model = MyModel.get(uuid_key)
     assert model.default_delimiter == value
     assert model.custom_delimiter == value
 
@@ -123,16 +124,16 @@ def test_serialization(expected_attributes, value):
         ),
     ],
 )
-def test_serialization_untyped(expected_attributes, value):
+def test_serialization_untyped(expected_attributes, value, uuid_key):
     model = MyModel()
-    model.id = 456
+    model.key = uuid_key
     model.untyped = value
     model.save()
 
     # verify underlying storage
-    item = MyModel._get_connection().get_item('456')
-    assert item == {'Item': {'id': {'N': '456'}, **expected_attributes}}
+    item = MyModel._get_connection().get_item(uuid_key)
+    assert item == {'Item': {'key': ANY, **expected_attributes}}
 
     # verify deserialization
-    model = MyModel.get(456)
+    model = MyModel.get(uuid_key)
     assert model.untyped == value

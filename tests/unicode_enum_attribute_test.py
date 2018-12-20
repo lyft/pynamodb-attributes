@@ -1,7 +1,8 @@
 from enum import Enum
+from unittest.mock import ANY
 
 import pytest
-from pynamodb.attributes import NumberAttribute
+from pynamodb.attributes import UnicodeAttribute
 from pynamodb.models import Model
 
 from pynamodb_attributes import UnicodeEnumAttribute
@@ -16,7 +17,7 @@ class MyEnum(Enum):
 class MyModel(Model):
     Meta = dynamodb_table_meta(__name__)
 
-    id = NumberAttribute(hash_key=True)  # noqa: A003
+    key = UnicodeAttribute(hash_key=True)
     value = UnicodeEnumAttribute(MyEnum, null=True)
 
 
@@ -30,16 +31,16 @@ def test_invalid_enum():
         foo_key = 'foo_value'
         bar_key = 2
 
-    with pytest.raises(TypeError):
+    with pytest.raises(TypeError, match="values must be all strings"):
         UnicodeEnumAttribute(IntEnum)
 
 
-def test_serialization_invalid_type():
+def test_serialization_invalid_type(uuid_key):
     model = MyModel()
-    model.id = 123
+    model.key = uuid_key
     model.value = "invalid"
 
-    with pytest.raises(TypeError):
+    with pytest.raises(TypeError, match="value has invalid type"):
         model.save()
 
 
@@ -50,18 +51,16 @@ def test_serialization_invalid_type():
         (MyEnum.bar_key, {'value': {'S': 'bar_value'}}),
     ],
 )
-def test_serialization(value, expected_attributes):
-    MyModel.create_table()
-
+def test_serialization(value, expected_attributes, uuid_key):
     model = MyModel()
-    model.id = 123
+    model.key = uuid_key
     model.value = value
     model.save()
 
     # verify underlying storage
-    item = MyModel._get_connection().get_item('123')
-    assert item == {'Item': {'id': {'N': '123'}, **expected_attributes}}
+    item = MyModel._get_connection().get_item(uuid_key)
+    assert item == {'Item': {'key': ANY, **expected_attributes}}
 
     # verify deserialization
-    model = MyModel.get(123)
+    model = MyModel.get(uuid_key)
     assert model.value == value
