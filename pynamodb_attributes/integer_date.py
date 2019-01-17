@@ -1,7 +1,5 @@
 import json
 from datetime import date
-from typing import Any
-from typing import TYPE_CHECKING
 
 from pynamodb.attributes import Attribute
 
@@ -18,7 +16,3 @@ class IntegerDateAttribute(Attribute):
     def deserialize(self, value: str) -> date:
         n = json.loads(value)
         return date(n // 1_00_00, n // 1_00 % 1_00, n % 1_00)
-
-    if TYPE_CHECKING:
-        def __get__(self, instance: Any, owner: Any) -> date:
-            ...
