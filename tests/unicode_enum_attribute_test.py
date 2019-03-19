@@ -96,7 +96,7 @@ def test_serialization(value, expected_attributes, uuid_key):
 
     # verify underlying storage
     item = MyModel._get_connection().get_item(uuid_key)
-    assert item == {'Item': {'key': ANY, **expected_attributes}}
+    assert item == {'ConsumedCapacity': ANY, 'Item': {'key': ANY, **expected_attributes}}
 
     # verify deserialization
     model = MyModel.get(uuid_key)
