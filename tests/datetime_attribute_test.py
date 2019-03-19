@@ -20,9 +20,6 @@ def create_table():
     MyModel.create_table()
 
 
-
-
-
 def test_serialization_non_null(uuid_key):
     model = MyModel()
     model.key = uuid_key
