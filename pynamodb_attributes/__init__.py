@@ -7,6 +7,7 @@ from .timestamp import TimestampMsAttribute
 from .timestamp import TimestampUsAttribute
 from .unicode_delimited_tuple import UnicodeDelimitedTupleAttribute
 from .unicode_enum import UnicodeEnumAttribute
+from .uuid import UUIDAttribute
 
 __all__ = [
     'FloatAttribute',
@@ -18,4 +19,5 @@ __all__ = [
     'TimestampAttribute',
     'TimestampMsAttribute',
     'TimestampUsAttribute',
+    'UUIDAttribute',
 ]

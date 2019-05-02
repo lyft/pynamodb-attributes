@@ -14,3 +14,5 @@ build/
 .coverage
 .mypy_cache
 .pytest_cache
+.dmypy.json
+coverage.xml
