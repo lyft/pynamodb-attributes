@@ -99,7 +99,7 @@ def test_serialization(expected_attributes, value, uuid_key):
 
     # verify underlying storage
     item = MyModel._get_connection().get_item(uuid_key)
-    assert item == {'Item': {'key': ANY, **expected_attributes}}
+    assert item['Item'] == {'key': ANY, **expected_attributes}
 
     # verify deserialization
     model = MyModel.get(uuid_key)
@@ -132,7 +132,7 @@ def test_serialization_untyped(expected_attributes, value, uuid_key):
 
     # verify underlying storage
     item = MyModel._get_connection().get_item(uuid_key)
-    assert item == {'Item': {'key': ANY, **expected_attributes}}
+    assert item['Item'] == {'key': ANY, **expected_attributes}
 
     # verify deserialization
     model = MyModel.get(uuid_key)
