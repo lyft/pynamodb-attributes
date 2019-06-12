@@ -29,7 +29,7 @@ def test_serialization_non_null(uuid_key):
 
     # verify underlying storage
     item = MyModel._get_connection().get_item(uuid_key)
-    assert item == {'Item': {'key': ANY, 'value': {'N': '20151231'}}}
+    assert item['Item'] == {'key': ANY, 'value': {'N': '20151231'}}
 
     # verify deserialization
     model = MyModel.get(uuid_key)
