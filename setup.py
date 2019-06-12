@@ -16,7 +16,7 @@ def find_stubs(package):  # type: ignore
 
 setup(
     name='pynamodb-attributes',
-    version='0.2.0',
+    version='0.2.1',
     description='Common attributes for PynamoDB',
     url='https://www.github.com/lyft/pynamodb-attributes',
     maintainer='Lyft',
