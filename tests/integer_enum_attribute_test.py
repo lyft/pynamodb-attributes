@@ -2,10 +2,10 @@ from enum import Enum
 from unittest.mock import ANY
 
 import pytest
-from integer_enum import IntegerEnumAttribute
 from pynamodb.attributes import UnicodeAttribute
 from pynamodb.models import Model
 
+from pynamodb_attributes.integer_enum import IntegerEnumAttribute
 from tests.meta import dynamodb_table_meta
 
 
