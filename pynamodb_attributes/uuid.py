@@ -1,4 +1,5 @@
-from typing import TYPE_CHECKING, Any
+from typing import Any
+from typing import TYPE_CHECKING
 from uuid import UUID
 
 import pynamodb.constants
@@ -18,7 +19,6 @@ class UUIDAttribute(Attribute):
 
         :param remove_dashes: will remove the dashes in the string
                               representation if True. Defaults to False.
-        :param kwargs: Extra kwargs passed to base Attribute object.
         """
         super().__init__(**kwargs)
         self._remove_dashes = remove_dashes
