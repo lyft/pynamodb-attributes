@@ -17,8 +17,8 @@ class UUIDAttribute(Attribute):
         """
         Initializes a UUIDAttribute object.
 
-        :param remove_dashes: will remove the dashes in the string
-                              representation if True. Defaults to False.
+        :param remove_dashes: if set, the string serialization will be without dashes.
+                              Defaults to False.
         """
         super().__init__(**kwargs)
         self._remove_dashes = remove_dashes

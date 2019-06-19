@@ -101,4 +101,4 @@ def test_uuid_attribute():
 
     reveal_type(MyModel.my_attr)  # E: Revealed type is 'pynamodb_attributes.uuid.UUIDAttribute'
     reveal_type(MyModel().my_attr)  # E: Revealed type is 'uuid.UUID*'
-    """)  # noqa: E501
+    """)
