@@ -41,10 +41,3 @@ class TimestampUsAttribute(TimestampAttribute):
     Stores times as a Unix epoch timestamp in microseconds (μs) in a DynamoDB number.
     """
     _multiplier = 1000000.0
-
-
-class TimestampNsAttribute(TimestampAttribute):
-    """"
-    Stores time as a Unix epoch timestamp in nanoseconds (ns) in a DynamoDB number.
-    """
-    _multiplier = 1000000000.0

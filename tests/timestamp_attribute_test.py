@@ -8,7 +8,6 @@ from pynamodb_attributes import (
     TimestampAttribute,
     TimestampMsAttribute,
     TimestampUsAttribute,
-    TimestampNsAttribute,
 )
 from tests.meta import dynamodb_table_meta
 
@@ -20,7 +19,6 @@ class MyModel(Model):
     value = TimestampAttribute()
     value_ms = TimestampMsAttribute()
     value_us = TimestampUsAttribute()
-    value_ns = TimestampNsAttribute()
 
 
 @pytest.fixture(scope='module', autouse=True)
@@ -35,7 +33,6 @@ def test_serialization(uuid_key):
     model.value = now
     model.value_ms = now
     model.value_us = now
-    model.value_ns = now
     model.save()
 
     # verify deserialization
@@ -43,7 +40,6 @@ def test_serialization(uuid_key):
     assert model.value == now.replace(microsecond=0)
     assert model.value_ms == now.replace(microsecond=now.microsecond // 1_000 * 1_000)
     assert model.value_us == now
-    assert model.value_ns == now  # datetime has only microsecond precision
 
 
 def test_set_invalid_type():
