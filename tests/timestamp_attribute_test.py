@@ -1,14 +1,13 @@
-from datetime import datetime, timezone
+from datetime import datetime
+from datetime import timezone
 
 import pytest
 from pynamodb.attributes import UnicodeAttribute
 from pynamodb.models import Model
 
-from pynamodb_attributes import (
-    TimestampAttribute,
-    TimestampMsAttribute,
-    TimestampUsAttribute,
-)
+from pynamodb_attributes import TimestampAttribute
+from pynamodb_attributes import TimestampMsAttribute
+from pynamodb_attributes import TimestampUsAttribute
 from tests.meta import dynamodb_table_meta
 
 

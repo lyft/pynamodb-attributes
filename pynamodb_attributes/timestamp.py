@@ -1,4 +1,7 @@
-from datetime import datetime, timezone
+from datetime import datetime
+from datetime import timezone
+from typing import Any
+from typing import Optional
 
 import pynamodb.constants
 from pynamodb.attributes import Attribute
@@ -21,7 +24,7 @@ class TimestampAttribute(Attribute):
     def serialize(self, value: datetime) -> str:
         return str(int(value.timestamp() * self._multiplier))
 
-    def __set__(self, instance, value: datetime) -> None:
+    def __set__(self, instance: Any, value: Optional[Any]) -> None:
         if not isinstance(value, datetime):
             raise TypeError(f"value has invalid type '{type(value)}'; datetime expected")
         if value.tzinfo is None or value.tzinfo.utcoffset(value) is None:

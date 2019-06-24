@@ -88,4 +88,4 @@ def test_timestamp_attribute():
     m.ts = 42  # E: Incompatible types in assignment (expression has type "int", variable has type "datetime")
     m.ts_ms = 42  # E: Incompatible types in assignment (expression has type "int", variable has type "datetime")
     m.ts_us = 42  # E: Incompatible types in assignment (expression has type "int", variable has type "datetime")
-    """)  # noqa: E501
+    """)
