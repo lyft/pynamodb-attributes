@@ -54,7 +54,7 @@ def test_set_invalid_type():
 
 def test_set_naive_datetime():
     model = MyModel()
-    with pytest.raises(TypeError, match='offset-aware datetime expected'):
+    with pytest.raises(TypeError, match='aware datetime expected'):
         model.value = datetime.utcnow()
 
 
