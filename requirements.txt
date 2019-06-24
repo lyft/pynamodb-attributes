@@ -1,5 +1,6 @@
-mypy>=0.650
-pre-commit>=1.13.0
-pytest>=4.1.1
-pytest-cov>=2.6.1
-pytest-mock>=1.10.0
+mypy>=0.710
+pre-commit>=1.17.0
+pytest>=4.6.3
+pytest-cov>=2.7.1
+pytest-env>=0.6.2
+pytest-mock>=1.10.4
