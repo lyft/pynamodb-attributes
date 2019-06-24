@@ -6,7 +6,7 @@ from pynamodb.attributes import Attribute
 
 class TimestampAttribute(Attribute):
     """"
-    Stores times as Unix epoch timestamps in a DynamoDB number.
+    Stores time as a Unix epoch timestamp (in seconds) in a DynamoDB number.
 
     >>> class MyModel(Model):
     >>>   created_at_seconds = TimestampAttribute(default=lambda: datetime.now(tz=timezone.utc))
@@ -31,13 +31,20 @@ class TimestampAttribute(Attribute):
 
 class TimestampMsAttribute(TimestampAttribute):
     """"
-    Stores times as Unix epoch timestamps in milliseconds in a DynamoDB number.
+    Stores time as a Unix epoch timestamp in milliseconds (ms) in a DynamoDB number.
     """
     _multiplier = 1000.0
 
 
-class TimestampNsAttribute(TimestampAttribute):
+class TimestampUsAttribute(TimestampAttribute):
     """"
-    Stores times as Unix epoch timestamps in nanoseconds in a DynamoDB number.
+    Stores times as a Unix epoch timestamp in microseconds (μs) in a DynamoDB number.
     """
     _multiplier = 1000000.0
+
+
+class TimestampNsAttribute(TimestampAttribute):
+    """"
+    Stores time as a Unix epoch timestamp in nanoseconds (ns) in a DynamoDB number.
+    """
+    _multiplier = 1000000000.0

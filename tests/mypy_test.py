@@ -79,13 +79,16 @@ def test_timestamp_attribute():
     class MyModel(Model):
         ts = TimestampAttribute()
         ts_ms = TimestampMsAttribute()
+        ts_us = TimestampUsAttribute()
         ts_ns = TimestampNsAttribute()
 
     m = MyModel()
     reveal_type(m.ts)  # E: Revealed type is 'datetime.datetime'
     reveal_type(m.ts_ms)  # E: Revealed type is 'datetime.datetime'
+    reveal_type(m.ts_us)  # E: Revealed type is 'datetime.datetime'
     reveal_type(m.ts_ns)  # E: Revealed type is 'datetime.datetime'
     m.ts = 42  # E: Incompatible types in assignment (expression has type "int", variable has type "datetime")
     m.ts_ms = 42  # E: Incompatible types in assignment (expression has type "int", variable has type "datetime")
+    m.ts_us = 42  # E: Incompatible types in assignment (expression has type "int", variable has type "datetime")
     m.ts_ns = 42  # E: Incompatible types in assignment (expression has type "int", variable has type "datetime")
     """)  # noqa: E501
