@@ -25,7 +25,7 @@ class TimestampAttribute(Attribute):
         if not isinstance(value, datetime):
             raise TypeError(f"value has invalid type '{type(value)}''; datetime expected")
         if value.tzinfo is None or value.tzinfo.utcoffset(value) is None:
-            raise TypeError("offset-aware datetime expected")
+            raise TypeError("aware datetime expected")
         return super().__set__(instance, value)
 
 
