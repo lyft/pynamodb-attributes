@@ -1,0 +1,19 @@
+from datetime import datetime
+from typing import Any
+
+from ._typing import Attribute
+
+
+class TimestampAttribute(Attribute[datetime]):
+    def __get__(self, instance: Any, owner: Any) -> datetime: ...
+    def __set__(self, instance: Any, value: datetime) -> None: ...
+
+
+class TimestampMsAttribute(TimestampAttribute):
+    def __get__(self, instance: Any, owner: Any) -> datetime: ...
+    def __set__(self, instance: Any, value: datetime) -> None: ...
+
+
+class TimestampUsAttribute(TimestampAttribute):
+    def __get__(self, instance: Any, owner: Any) -> datetime: ...
+    def __set__(self, instance: Any, value: datetime) -> None: ...

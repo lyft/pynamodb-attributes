@@ -69,3 +69,23 @@ def test_unicode_enum_attribute():
     reveal_type(MyModel.my_attr)  # E: Revealed type is 'pynamodb_attributes.unicode_enum.UnicodeEnumAttribute[__main__.MyEnum]'
     reveal_type(MyModel().my_attr)  # E: Revealed type is '__main__.MyEnum*'
     """)  # noqa: E501
+
+
+def test_timestamp_attribute():
+    assert_mypy_output("""
+    from pynamodb.models import Model
+    from pynamodb_attributes import TimestampAttribute, TimestampMsAttribute, TimestampUsAttribute
+
+    class MyModel(Model):
+        ts = TimestampAttribute()
+        ts_ms = TimestampMsAttribute()
+        ts_us = TimestampUsAttribute()
+
+    m = MyModel()
+    reveal_type(m.ts)  # E: Revealed type is 'datetime.datetime'
+    reveal_type(m.ts_ms)  # E: Revealed type is 'datetime.datetime'
+    reveal_type(m.ts_us)  # E: Revealed type is 'datetime.datetime'
+    m.ts = 42  # E: Incompatible types in assignment (expression has type "int", variable has type "datetime")
+    m.ts_ms = 42  # E: Incompatible types in assignment (expression has type "int", variable has type "datetime")
+    m.ts_us = 42  # E: Incompatible types in assignment (expression has type "int", variable has type "datetime")
+    """)
