@@ -8,4 +8,10 @@
 
 # pynamodb-attributes
 
-This Python 3 library contains compound and high-level PynamoDB attributes.
+This Python 3 library contains compound and high-level PynamoDB attributes:
+
+- `IntegerAttribute` – same as `NumberAttribute` but whose value is typed as `int` (rather than `float`)
+- `UnicodeDelimitedTupleAttribute` - a delimiter-separated value, useful for storing composite keys
+- `UnicodeEnumAttribute` - serializes a string-valued `Enum` into a Unicode (`S`-typed) attribute
+- `TimestampAttribute`, `TimestampMsAttribute`, `TimestampUsAttribute` – serializes `datetime`s as Unix epoch seconds, milliseconds (ms) or microseconds (µs)
+- `IntegerDateAttribute` - serializes `date` as an integer representing the Gregorian date (e.g. `20181231`)
