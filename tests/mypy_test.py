@@ -89,3 +89,16 @@ def test_timestamp_attribute():
     m.ts_ms = 42  # E: Incompatible types in assignment (expression has type "int", variable has type "datetime")
     m.ts_us = 42  # E: Incompatible types in assignment (expression has type "int", variable has type "datetime")
     """)
+
+
+def test_uuid_attribute():
+    assert_mypy_output("""
+    from pynamodb.models import Model
+    from pynamodb_attributes import UUIDAttribute
+
+    class MyModel(Model):
+        my_attr = UUIDAttribute()
+
+    reveal_type(MyModel.my_attr)  # E: Revealed type is 'pynamodb_attributes.uuid.UUIDAttribute'
+    reveal_type(MyModel().my_attr)  # E: Revealed type is 'uuid.UUID*'
+    """)
