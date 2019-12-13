@@ -25,7 +25,7 @@ class TimestampAttribute(Attribute):
         return str(int(value.timestamp() * self._multiplier))
 
     def __set__(self, instance: Any, value: Optional[Any]) -> None:
-        if not isinstance(value, (datetime, None)):
+        if not isinstance(value, (datetime, type(None))):
             if value is None and not self.null:
                 raise TypeError(f"value is None in non-nullable TimestampAttribute")
             else:
