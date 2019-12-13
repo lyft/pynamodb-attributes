@@ -55,15 +55,18 @@ def test_set_naive_datetime():
     with pytest.raises(TypeError, match='aware datetime expected'):
         model.value = datetime.utcnow()
 
+
 def test_set_none_fails_on_nonnullable():
     model = MyModel()
     with pytest.raises(TypeError, match='nullable'):
         model.value = None
 
+
 def test_set_none_succeeds_on_nullable():
     model = MyModel()
     model.null_value = None
     assert model.null_value is None
+
 
 def test_set_timestame_succeeds_on_nullable():
     model = MyModel()
@@ -71,11 +74,13 @@ def test_set_timestame_succeeds_on_nullable():
     model.null_value = now
     assert model.null_value == now
 
+
 def test_set_get():
     model = MyModel()
     now = datetime.now(tz=timezone.utc)
     model.value = now
     assert model.value == now, "data lost before serialization"
+
 
 def test_set_get_nullable():
     model = MyModel()
