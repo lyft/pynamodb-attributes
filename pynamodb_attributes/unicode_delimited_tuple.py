@@ -51,7 +51,7 @@ class UnicodeDelimitedTupleAttribute(Attribute, Generic[T]):
     def serialize(self, value: T) -> str:
         if not isinstance(value, self.tuple_type):
             raise TypeError(f"value has invalid type '{type(value)}'; expected '{self.tuple_type}'")
-        values = [e for e in value]
+        values = list(value)
         while values and values[-1] is None:
             del values[-1]
         strings = [str(e) for e in values]
