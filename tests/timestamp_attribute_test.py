@@ -56,12 +56,6 @@ def test_set_naive_datetime():
         model.value = datetime.utcnow()
 
 
-def test_set_none_fails_on_nonnullable():
-    model = MyModel()
-    with pytest.raises(TypeError, match='nullable'):
-        model.value = None
-
-
 def test_set_none_succeeds_on_nullable():
     model = MyModel()
     model.null_value = None
