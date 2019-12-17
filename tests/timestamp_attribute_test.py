@@ -19,6 +19,8 @@ class MyModel(Model):
     value_ms = TimestampMsAttribute()
     value_us = TimestampUsAttribute()
 
+    null_value = TimestampAttribute(null=True)
+
 
 @pytest.fixture(scope='module', autouse=True)
 def create_table():
@@ -39,6 +41,7 @@ def test_serialization(uuid_key):
     assert model.value == now.replace(microsecond=0)
     assert model.value_ms == now.replace(microsecond=now.microsecond // 1_000 * 1_000)
     assert model.value_us == now
+    assert model.null_value is None
 
 
 def test_set_invalid_type():
@@ -53,8 +56,28 @@ def test_set_naive_datetime():
         model.value = datetime.utcnow()
 
 
+def test_set_none_succeeds_on_nullable():
+    model = MyModel()
+    model.null_value = None
+    assert model.null_value is None
+
+
+def test_set_timestame_succeeds_on_nullable():
+    model = MyModel()
+    now = datetime.now(tz=timezone.utc)
+    model.null_value = now
+    assert model.null_value == now
+
+
 def test_set_get():
     model = MyModel()
     now = datetime.now(tz=timezone.utc)
     model.value = now
-    assert model.value == now  # assert no data loss (before serialization)
+    assert model.value == now, "data lost before serialization"
+
+
+def test_set_get_nullable():
+    model = MyModel()
+    now = datetime.now(tz=timezone.utc)
+    model.null_value = now
+    assert model.null_value == now, "data lost before serialization"

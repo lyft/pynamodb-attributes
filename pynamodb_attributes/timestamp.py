@@ -25,10 +25,11 @@ class TimestampAttribute(Attribute):
         return str(int(value.timestamp() * self._multiplier))
 
     def __set__(self, instance: Any, value: Optional[Any]) -> None:
-        if not isinstance(value, datetime):
-            raise TypeError(f"value has invalid type '{type(value)}'; datetime expected")
-        if value.tzinfo is None or value.tzinfo.utcoffset(value) is None:
-            raise TypeError("aware datetime expected")
+        if value is not None:
+            if not isinstance(value, datetime):
+                raise TypeError(f"value has invalid type '{type(value)}'; datetime expected")
+            if value.tzinfo is None or value.tzinfo.utcoffset(value) is None:
+                raise TypeError("aware datetime expected")
         return super().__set__(instance, value)
 
 
