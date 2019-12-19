@@ -34,6 +34,7 @@ def test_serialization(uuid_key):
     model.value = now
     model.value_ms = now
     model.value_us = now
+    model.null_value = None
     model.save()
 
     # verify deserialization
@@ -62,7 +63,7 @@ def test_set_none_succeeds_on_nullable():
     assert model.null_value is None
 
 
-def test_set_timestame_succeeds_on_nullable():
+def test_set_timestamp_succeeds_on_nullable():
     model = MyModel()
     now = datetime.now(tz=timezone.utc)
     model.null_value = now

@@ -18,10 +18,14 @@ class TimestampAttribute(Attribute):
     attr_type = pynamodb.constants.NUMBER
     _multiplier = 1.0
 
-    def deserialize(self, value: str) -> datetime:
+    def deserialize(self, value: Optional[str]) -> Optional[datetime]:
+        if value is None:
+            return None
         return datetime.fromtimestamp(int(value) / self._multiplier, tz=timezone.utc)
 
-    def serialize(self, value: datetime) -> str:
+    def serialize(self, value: Optional[datetime]) -> Optional[str]:
+        if value is None:
+            return None
         return str(int(value.timestamp() * self._multiplier))
 
     def __set__(self, instance: Any, value: Optional[Any]) -> None:
