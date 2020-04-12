@@ -1,7 +1,7 @@
 sudo: false
 language: python
 python:
-  - '3.6'
+  - '3.8'
 cache:
   directories:
     - $HOME/.cache/pip
@@ -22,7 +22,7 @@ script:
 jobs:
   include:
     - stage: deploy
-      python: '3.6'
+      python: '3.8'
       deploy:
         provider: pypi
         user: lyft-pynamodb-attributes
@@ -30,5 +30,5 @@ jobs:
           secure: "oPXSYwu9CIsVf0J72A7O/pKydEWfSPdUzMAonS5MjmCfyG7h+ZcrrOragtGC3Z5tbbwVIygNLRTAFLF+8ob+pfv7tk3sQPe05n7W0tBG03Rd3gJbkfjvWgtK+3rJHMXrFP+f3Vhd8eeIGsZkK857GpZ0N8/0GicrJe0T3tUyf6D3P/sPcHYMKXjZLQXbTYmdhr8SZUYuCoWnK+M69UPaZThrbgxu+Jx340rUpbsgbFLkkqea3252YeSDtYEBLszW8tr65X46Ea33c3WBS+7mTYVWNrlXwKq6Pxe/0merDhXEVbbLTjkxZB6PGe2YCdF+df8jzrKbaNjg2xSgBObbN/AaJMjSluPeH4uJnxlN5+OM99/+mZUA2zGgkTR/La0Zx3DCaqWpRuC2hdptU+Djc6oz6W0j3ZsQZX5ODQ/YZD2RyX6M7tfH7P5JEv+jEcM+7x0cUJHxbWVOqUcUTb5rmP2VdjQGW+YFRowtjWtw5jG4nGhVGHKOYk1VUEpOttyy1rioYpmsIRVggsERJ9BFTlXJF9LD15UXnm4xfShKIlF7dOj1N2RU3GU4pZ54Tb3UJrPtF8IKDSWy1Izzxurvcjaeae85LciKN1jtP/CsNKEb1azCtJlDpIBi5I7I8eZdMPo2AISUV7wqD50+3Br/SmPNvArL1tHKD46qS1DyCN8="
         on:
           tags: true
-          distributions: sdist
+          distributions: sdist bdist_wheel
           repo: lyft/pynamodb-attributes
