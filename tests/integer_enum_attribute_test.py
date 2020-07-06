@@ -58,25 +58,31 @@ def test_serialization_invalid_type(uuid_key):
 
 
 def test_serialization_unknown_value_fail(uuid_key):
-    MyModel._get_connection().put_item(uuid_key, attributes={
-        'value': {'N': '9001'},
-    })
+    MyModel._get_connection().put_item(
+        uuid_key, attributes={
+            'value': {'N': '9001'},
+        },
+    )
     with pytest.raises(ValueError, match="9001 is not a valid MyEnum"):
         MyModel.get(uuid_key)
 
 
 def test_serialization_unknown_value_success(uuid_key):
-    MyModel._get_connection().put_item(uuid_key, attributes={
-        'value_with_unknown': {'N': '9001'},
-    })
+    MyModel._get_connection().put_item(
+        uuid_key, attributes={
+            'value_with_unknown': {'N': '9001'},
+        },
+    )
     model = MyModel.get(uuid_key)
     assert model.value_with_unknown == MyEnum.unknown_key
 
 
 def test_serialization_missing_value_success(uuid_key):
-    MyModel._get_connection().put_item(uuid_key, attributes={
-        'value_with_missing': {'N': '9001'},
-    })
+    MyModel._get_connection().put_item(
+        uuid_key, attributes={
+            'value_with_missing': {'N': '9001'},
+        },
+    )
     model = MyModel.get(uuid_key)
     assert model.value_with_missing == MyEnumWithMissing.missing_key
 
