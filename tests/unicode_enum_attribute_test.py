@@ -6,6 +6,7 @@ from pynamodb.attributes import UnicodeAttribute
 from pynamodb.models import Model
 
 from pynamodb_attributes import UnicodeEnumAttribute
+from tests.connection import _connection
 from tests.meta import dynamodb_table_meta
 
 
@@ -51,14 +52,14 @@ def test_invalid_enum():
 def test_serialization_invalid_type(uuid_key):
     model = MyModel()
     model.key = uuid_key
-    model.value = "invalid"
+    model.value = "invalid"  # type: ignore
 
     with pytest.raises(TypeError, match="value has invalid type"):
         model.save()
 
 
 def test_serialization_unknown_value_fail(uuid_key):
-    MyModel._get_connection().put_item(
+    _connection(MyModel).put_item(
         uuid_key, attributes={
             'value': {'S': 'nonexistent_value'},
         },
@@ -68,7 +69,7 @@ def test_serialization_unknown_value_fail(uuid_key):
 
 
 def test_serialization_unknown_value_success(uuid_key):
-    MyModel._get_connection().put_item(
+    _connection(MyModel).put_item(
         uuid_key, attributes={
             'value_with_unknown': {'S': 'nonexistent_value'},
         },
@@ -78,7 +79,7 @@ def test_serialization_unknown_value_success(uuid_key):
 
 
 def test_serialization_missing_value_success(uuid_key):
-    MyModel._get_connection().put_item(
+    _connection(MyModel).put_item(
         uuid_key, attributes={
             'value_with_missing': {'S': 'nonexistent_value'},
         },
@@ -101,7 +102,7 @@ def test_serialization(value, expected_attributes, uuid_key):
     model.save()
 
     # verify underlying storage
-    item = MyModel._get_connection().get_item(uuid_key)
+    item = _connection(MyModel).get_item(uuid_key)
     assert item['Item'] == {'key': ANY, **expected_attributes}
 
     # verify deserialization

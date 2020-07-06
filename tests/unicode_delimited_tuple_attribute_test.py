@@ -6,13 +6,15 @@ from pynamodb.attributes import UnicodeAttribute
 from pynamodb.models import Model
 
 from pynamodb_attributes import UnicodeDelimitedTupleAttribute
+from tests.connection import _connection
 from tests.meta import dynamodb_table_meta
 
 
 class MyTuple(NamedTuple):
     country: str
     city: str
-    zip_code: int = None
+    # should be Optional[int] but deserialization does not support it
+    zip_code: int = None  # type: ignore
 
 
 @pytest.fixture(scope='module', autouse=True)
@@ -53,7 +55,7 @@ def test_serialization_containing_custom_delimiter(uuid_key):
 def test_serialization_invalid_type(uuid_key):
     model = MyModel()
     model.key = uuid_key
-    model.default_delimiter = (1, 2, 3)
+    model.default_delimiter = (1, 2, 3)  # type: ignore
 
     with pytest.raises(TypeError):
         model.save()
@@ -98,7 +100,7 @@ def test_serialization(expected_attributes, value, uuid_key):
     model.save()
 
     # verify underlying storage
-    item = MyModel._get_connection().get_item(uuid_key)
+    item = _connection(MyModel).get_item(uuid_key)
     assert item['Item'] == {'key': ANY, **expected_attributes}
 
     # verify deserialization
@@ -131,7 +133,7 @@ def test_serialization_untyped(expected_attributes, value, uuid_key):
     model.save()
 
     # verify underlying storage
-    item = MyModel._get_connection().get_item(uuid_key)
+    item = _connection(MyModel).get_item(uuid_key)
     assert item['Item'] == {'key': ANY, **expected_attributes}
 
     # verify deserialization

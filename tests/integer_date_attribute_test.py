@@ -6,6 +6,7 @@ from pynamodb.attributes import UnicodeAttribute
 from pynamodb.models import Model
 
 from pynamodb_attributes.integer_date import IntegerDateAttribute
+from tests.connection import _connection
 from tests.meta import dynamodb_table_meta
 
 
@@ -28,7 +29,7 @@ def test_serialization_non_null(uuid_key):
     model.save()
 
     # verify underlying storage
-    item = MyModel._get_connection().get_item(uuid_key)
+    item = _connection(MyModel).get_item(uuid_key)
     assert item['Item'] == {'key': ANY, 'value': {'N': '20151231'}}
 
     # verify deserialization
@@ -45,7 +46,7 @@ def test_serialization_null(uuid_key):
     model.save()
 
     # verify underlying storage
-    item = MyModel._get_connection().get_item(uuid_key)
+    item = _connection(MyModel).get_item(uuid_key)
     assert 'value' not in item['Item']
 
     # verify deserialization
