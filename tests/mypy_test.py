@@ -73,6 +73,7 @@ def test_unicode_enum_attribute():
 
 def test_timestamp_attribute():
     assert_mypy_output("""
+    from datetime import datetime
     from pynamodb.models import Model
     from pynamodb_attributes import TimestampAttribute, TimestampMsAttribute, TimestampUsAttribute
 
@@ -82,13 +83,15 @@ def test_timestamp_attribute():
         ts_us = TimestampUsAttribute()
 
     m = MyModel()
-    reveal_type(m.ts)  # E: Revealed type is 'datetime.datetime'
-    reveal_type(m.ts_ms)  # E: Revealed type is 'datetime.datetime'
-    reveal_type(m.ts_us)  # E: Revealed type is 'datetime.datetime'
-    m.ts = 42  # E: Incompatible types in assignment (expression has type "int", variable has type "datetime")
-    m.ts_ms = 42  # E: Incompatible types in assignment (expression has type "int", variable has type "datetime")
-    m.ts_us = 42  # E: Incompatible types in assignment (expression has type "int", variable has type "datetime")
-    """)
+    reveal_type(m.ts)  # E: Revealed type is 'datetime.datetime*'
+    reveal_type(m.ts_ms)  # E: Revealed type is 'datetime.datetime*'
+    reveal_type(m.ts_us)  # E: Revealed type is 'datetime.datetime*'
+    m.ts = 42  # E: Incompatible types in assignment (expression has type "int", variable has type "Optional[datetime]")
+    m.ts_ms = 42  # E: Incompatible types in assignment (expression has type "int", variable has type "Optional[datetime]")
+    m.ts_us = 42  # E: Incompatible types in assignment (expression has type "int", variable has type "Optional[datetime]")
+
+    m.save(condition=MyModel.ts == datetime.now())
+    """)  # noqa: E501
 
 
 def test_uuid_attribute():
