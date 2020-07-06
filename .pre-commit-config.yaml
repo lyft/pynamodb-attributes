@@ -3,6 +3,10 @@ repos:
       rev: v1.5.0
       hooks:
           - id: reorder-python-imports
+    - repo: https://github.com/asottile/add-trailing-comma
+      rev: v2.0.1
+      hooks:
+          - id: add-trailing-comma
     - repo: https://github.com/pre-commit/pre-commit-hooks
       rev: v2.2.3
       hooks:
@@ -20,7 +24,6 @@ repos:
                 - flake8-bugbear
                 - flake8-builtins
                 - flake8-comprehensions
-                - flake8-commas
           - id: trailing-whitespace
     - repo: https://github.com/asottile/yesqa
       rev: v0.0.11
@@ -31,7 +34,6 @@ repos:
                 - flake8-bugbear
                 - flake8-builtins
                 - flake8-comprehensions
-                - flake8-commas
     - repo: https://github.com/thlorenz/doctoc
       rev: v1.4.0
       hooks:

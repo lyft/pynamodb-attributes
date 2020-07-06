@@ -58,25 +58,31 @@ def test_serialization_invalid_type(uuid_key):
 
 
 def test_serialization_unknown_value_fail(uuid_key):
-    MyModel._get_connection().put_item(uuid_key, attributes={
-        'value': {'S': 'nonexistent_value'},
-    })
+    MyModel._get_connection().put_item(
+        uuid_key, attributes={
+            'value': {'S': 'nonexistent_value'},
+        },
+    )
     with pytest.raises(ValueError, match="'nonexistent_value' is not a valid MyEnum"):
         MyModel.get(uuid_key)
 
 
 def test_serialization_unknown_value_success(uuid_key):
-    MyModel._get_connection().put_item(uuid_key, attributes={
-        'value_with_unknown': {'S': 'nonexistent_value'},
-    })
+    MyModel._get_connection().put_item(
+        uuid_key, attributes={
+            'value_with_unknown': {'S': 'nonexistent_value'},
+        },
+    )
     model = MyModel.get(uuid_key)
     assert model.value_with_unknown == MyEnum.unknown_key
 
 
 def test_serialization_missing_value_success(uuid_key):
-    MyModel._get_connection().put_item(uuid_key, attributes={
-        'value_with_missing': {'S': 'nonexistent_value'},
-    })
+    MyModel._get_connection().put_item(
+        uuid_key, attributes={
+            'value_with_missing': {'S': 'nonexistent_value'},
+        },
+    )
     model = MyModel.get(uuid_key)
     assert model.value_with_missing == MyEnumWithMissing.missing_key
 
