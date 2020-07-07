@@ -1,18 +1,17 @@
 from typing import Any
-from typing import Generic
 from typing import Tuple
 from typing import Type
-from typing import TYPE_CHECKING
 from typing import TypeVar
 
 import pynamodb.constants
-from pynamodb.attributes import Attribute
+
+from ._typing import Attribute
 
 T = TypeVar('T', bound=tuple)
 _DEFAULT_FIELD_DELIMITER = '::'
 
 
-class UnicodeDelimitedTupleAttribute(Attribute, Generic[T]):
+class UnicodeDelimitedTupleAttribute(Attribute[T]):
     """
     Stores a tuple of strings as a string. The tuple's members will be joined with a delimiter.
 
@@ -58,7 +57,3 @@ class UnicodeDelimitedTupleAttribute(Attribute, Generic[T]):
         if any(self.delimiter in s for s in strings):
             raise ValueError(f"Tuple elements may not contain delimiter '{self.delimiter}'")
         return self.delimiter.join(strings)
-
-    if TYPE_CHECKING:
-        def __get__(self, instance: Any, owner: Any) -> T:
-            ...
