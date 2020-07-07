@@ -1,12 +1,12 @@
 from typing import Any
-from typing import TYPE_CHECKING
 from uuid import UUID
 
 import pynamodb.constants
-from pynamodb.attributes import Attribute
+
+from ._typing import Attribute
 
 
-class UUIDAttribute(Attribute):
+class UUIDAttribute(Attribute[UUID]):
     """
     PynamoDB attribute to for UUIDs. These are backed by DynamoDB unicode (`S`) types.
     """
@@ -33,7 +33,3 @@ class UUIDAttribute(Attribute):
 
     def deserialize(self, value: str) -> UUID:
         return UUID(value)
-
-    if TYPE_CHECKING:
-        def __get__(self, instance: Any, owner: Any) -> UUID:
-            ...

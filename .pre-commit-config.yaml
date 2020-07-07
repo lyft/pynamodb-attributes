@@ -48,7 +48,5 @@ repos:
       rev: v0.782
       hooks:
         - id: mypy
-          exclude: >
-            (?x)^(
-              tests/.*|
-            )$
+          additional_dependencies:
+            - pynamodb==4.3.2

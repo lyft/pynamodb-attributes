@@ -1,19 +1,18 @@
 from enum import Enum
 from typing import Any
-from typing import Generic
 from typing import Optional
 from typing import Type
-from typing import TYPE_CHECKING
 from typing import TypeVar
 
 import pynamodb.constants
-from pynamodb.attributes import Attribute
+
+from ._typing import Attribute
 
 T = TypeVar('T', bound=Enum)
 _fail: Any = object()
 
 
-class UnicodeEnumAttribute(Attribute, Generic[T]):
+class UnicodeEnumAttribute(Attribute[T]):
     """
     Stores string enumerations (Enums whose values are strings) as DynamoDB strings.
 
@@ -54,7 +53,3 @@ class UnicodeEnumAttribute(Attribute, Generic[T]):
         if not isinstance(value, self.enum_type):
             raise TypeError(f"value has invalid type '{type(value)}'; expected '{self.enum_type}'")
         return value.value
-
-    if TYPE_CHECKING:
-        def __get__(self, instance: Any, owner: Any) -> T:
-            ...

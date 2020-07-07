@@ -4,10 +4,11 @@ from typing import Any
 from typing import Optional
 
 import pynamodb.constants
-from pynamodb.attributes import Attribute
+
+from ._typing import Attribute
 
 
-class TimestampAttribute(Attribute):
+class TimestampAttribute(Attribute[datetime]):
     """"
     Stores time as a Unix epoch timestamp (in seconds) in a DynamoDB number.
 
