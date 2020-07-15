@@ -43,7 +43,19 @@ class UnicodeDelimitedTupleAttribute(Attribute[T]):
         field_types = getattr(self.tuple_type, '_field_types', None)
         if fields and field_types:
             values = value.split(self.delimiter, maxsplit=len(fields))
-            return self.tuple_type(**{f: field_types[f](v) for f, v in zip(fields, values)})  # type: ignore
+        tuple_vals = {}
+        for f, v in zip(fields, values):
+            if field_types[f].__module__ == 'builtins':
+                tuple_vals[f] = field_types[f](v)
+            elif field_types[f].__module__ == 'typing' and field_types[f].__origin__ == typing.Union:
+                for arg_type in field_types[f].__args__:
+                    try:
+                        tuple_vals[f] = arg_type(v)
+                        break
+                    except Exception:
+                        continue
+
+            return self.tuple_type(**tuple_vals)  # type: ignore
         else:
             return self.tuple_type(value.split(self.delimiter))  # type: ignore
 
