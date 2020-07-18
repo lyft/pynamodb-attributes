@@ -71,6 +71,26 @@ def test_unicode_enum_attribute():
     """)  # noqa: E501
 
 
+def test_timedelta_attribute():
+    assert_mypy_output("""
+    from datetime import timedelta
+    from pynamodb.models import Model
+    from pynamodb_attributes import TimedeltaAttribute, TimedeltaMsAttribute, TimedeltaUsAttribute
+
+    class MyModel(Model):
+        td = TimedeltaAttribute()
+        td_ms = TimedeltaMsAttribute()
+        td_us = TimedeltaUsAttribute()
+
+    m = MyModel()
+    reveal_type(m.td)  # E: Revealed type is 'datetime.timedelta*'
+    reveal_type(m.td_ms)  # E: Revealed type is 'datetime.timedelta*'
+    reveal_type(m.td_us)  # E: Revealed type is 'datetime.timedelta*'
+
+    m.save(condition=MyModel.td == timedelta(seconds=5))
+    """)
+
+
 def test_timestamp_attribute():
     assert_mypy_output("""
     from datetime import datetime
