@@ -10,7 +10,7 @@ _T = TypeVar('_T')
 
 # TODO: derive from pynamodb.attributes.Attribute directly when pynamodb>=5
 if TYPE_CHECKING:
-    _A = TypeVar('_A', bound=pynamodb.attributes.Attribute)
+    _A = TypeVar('_A', bound=pynamodb.attributes.Attribute[Any])
 
     class Attribute(Generic[_T], pynamodb.attributes.Attribute[_T]):
         @overload
