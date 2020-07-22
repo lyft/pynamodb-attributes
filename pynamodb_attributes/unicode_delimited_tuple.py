@@ -1,4 +1,5 @@
 from typing import Any
+from typing import List
 from typing import Tuple
 from typing import Type
 from typing import TypeVar
@@ -7,7 +8,7 @@ import pynamodb.constants
 
 from ._typing import Attribute
 
-T = TypeVar('T', bound=tuple)
+T = TypeVar('T', bound=Tuple[Any, ...])
 _DEFAULT_FIELD_DELIMITER = '::'
 
 
@@ -35,7 +36,7 @@ class UnicodeDelimitedTupleAttribute(Attribute[T]):
         :param delimiter: The delimiter to separate the tuple elements
         """
         super().__init__(**kwargs)
-        self.tuple_type: Type[Tuple] = tuple_type
+        self.tuple_type: Type[T] = tuple_type
         self.delimiter = delimiter
 
     def deserialize(self, value: str) -> T:
@@ -43,14 +44,14 @@ class UnicodeDelimitedTupleAttribute(Attribute[T]):
         field_types = getattr(self.tuple_type, '_field_types', None)
         if fields and field_types:
             values = value.split(self.delimiter, maxsplit=len(fields))
-            return self.tuple_type(**{f: field_types[f](v) for f, v in zip(fields, values)})  # type: ignore
+            return self.tuple_type(**{f: field_types[f](v) for f, v in zip(fields, values)})
         else:
-            return self.tuple_type(value.split(self.delimiter))  # type: ignore
+            return self.tuple_type(value.split(self.delimiter))
 
     def serialize(self, value: T) -> str:
         if not isinstance(value, self.tuple_type):
             raise TypeError(f"value has invalid type '{type(value)}'; expected '{self.tuple_type}'")
-        values = list(value)
+        values: List[T] = list(value)
         while values and values[-1] is None:
             del values[-1]
         strings = [str(e) for e in values]
