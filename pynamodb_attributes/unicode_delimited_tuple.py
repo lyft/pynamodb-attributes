@@ -5,8 +5,7 @@ from typing import Type
 from typing import TypeVar
 
 import pynamodb.constants
-
-from ._typing import Attribute
+from pynamodb.attributes import Attribute
 
 T = TypeVar('T', bound=Tuple[Any, ...])
 _DEFAULT_FIELD_DELIMITER = '::'

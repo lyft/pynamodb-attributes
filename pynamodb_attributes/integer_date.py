@@ -1,7 +1,8 @@
 import json
 from datetime import date
 
-from ._typing import Attribute
+from pynamodb.attributes import Attribute
+
 from pynamodb_attributes import IntegerAttribute
 
 

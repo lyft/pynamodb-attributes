@@ -4,8 +4,7 @@ from typing import Any
 from typing import Optional
 
 import pynamodb.constants
-
-from ._typing import Attribute
+from pynamodb.attributes import Attribute
 
 
 class TimestampAttribute(Attribute[datetime]):

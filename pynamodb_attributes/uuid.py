@@ -2,8 +2,7 @@ from typing import Any
 from uuid import UUID
 
 import pynamodb.constants
-
-from ._typing import Attribute
+from pynamodb.attributes import Attribute
 
 
 class UUIDAttribute(Attribute[UUID]):
