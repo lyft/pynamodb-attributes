@@ -3,8 +3,7 @@ from typing import Any
 from typing import Optional
 
 import pynamodb
-
-from ._typing import Attribute
+from pynamodb.attributes import Attribute
 
 
 class TimedeltaAttribute(Attribute[timedelta]):

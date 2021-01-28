@@ -1,6 +1,5 @@
+from pynamodb.attributes import Attribute
 from pynamodb.attributes import NumberAttribute
-
-from ._typing import Attribute
 
 
 class FloatAttribute(Attribute[float]):
