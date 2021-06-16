@@ -40,7 +40,7 @@ class UnicodeDelimitedTupleAttribute(Attribute[T]):
 
     def deserialize(self, value: str) -> T:
         fields = getattr(self.tuple_type, '_fields', None)
-        field_types = getattr(self.tuple_type, '_field_types', None)
+        field_types = getattr(self.tuple_type, '__annotations__', None)
         if fields and field_types:
             values = value.split(self.delimiter, maxsplit=len(fields))
             return self.tuple_type(**{f: field_types[f](v) for f, v in zip(fields, values)})
