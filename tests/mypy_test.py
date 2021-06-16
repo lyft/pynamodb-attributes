@@ -16,8 +16,8 @@ def test_integer_attribute():
     class MyModel(Model):
         my_attr = IntegerAttribute()
 
-    reveal_type(MyModel.my_attr)  # E: Revealed type is 'pynamodb_attributes.integer.IntegerAttribute'
-    reveal_type(MyModel().my_attr)  # E: Revealed type is 'builtins.int*'
+    reveal_type(MyModel.my_attr)  # E: Revealed type is "pynamodb_attributes.integer.IntegerAttribute"
+    reveal_type(MyModel().my_attr)  # E: Revealed type is "builtins.int*"
     """)
 
 
@@ -29,8 +29,8 @@ def test_integer_date_attribute():
     class MyModel(Model):
         my_attr = IntegerDateAttribute()
 
-    reveal_type(MyModel.my_attr)  # E: Revealed type is 'pynamodb_attributes.integer_date.IntegerDateAttribute'
-    reveal_type(MyModel().my_attr)  # E: Revealed type is 'datetime.date*'
+    reveal_type(MyModel.my_attr)  # E: Revealed type is "pynamodb_attributes.integer_date.IntegerDateAttribute"
+    reveal_type(MyModel().my_attr)  # E: Revealed type is "datetime.date*"
     """)
 
 
@@ -47,9 +47,9 @@ def test_unicode_delimited_tuple_attribute():
     class MyModel(Model):
         my_attr = UnicodeDelimitedTupleAttribute(MyTuple)
 
-    reveal_type(MyModel.my_attr)  # E: Revealed type is 'pynamodb_attributes.unicode_delimited_tuple.UnicodeDelimitedTupleAttribute[Tuple[builtins.str, builtins.str, fallback=__main__.MyTuple]]'
-    reveal_type(MyModel().my_attr)  # E: Revealed type is 'Tuple[builtins.str, builtins.str, fallback=__main__.MyTuple]'
-    reveal_type(MyModel().my_attr.foo)  # E: Revealed type is 'builtins.str'
+    reveal_type(MyModel.my_attr)  # E: Revealed type is "pynamodb_attributes.unicode_delimited_tuple.UnicodeDelimitedTupleAttribute[Tuple[builtins.str, builtins.str, fallback=__main__.MyTuple]]"
+    reveal_type(MyModel().my_attr)  # E: Revealed type is "Tuple[builtins.str, builtins.str, fallback=__main__.MyTuple]"
+    reveal_type(MyModel().my_attr.foo)  # E: Revealed type is "builtins.str"
     """)  # noqa: E501
 
 
@@ -60,14 +60,14 @@ def test_unicode_enum_attribute():
     from pynamodb_attributes import UnicodeEnumAttribute
 
     class MyEnum(Enum):
-        foo = 'foo'
-        bar = 'bar'
+        foo = "foo"
+        bar = "bar"
 
     class MyModel(Model):
         my_attr = UnicodeEnumAttribute(MyEnum)
 
-    reveal_type(MyModel.my_attr)  # E: Revealed type is 'pynamodb_attributes.unicode_enum.UnicodeEnumAttribute[__main__.MyEnum]'
-    reveal_type(MyModel().my_attr)  # E: Revealed type is '__main__.MyEnum*'
+    reveal_type(MyModel.my_attr)  # E: Revealed type is "pynamodb_attributes.unicode_enum.UnicodeEnumAttribute[__main__.MyEnum]"
+    reveal_type(MyModel().my_attr)  # E: Revealed type is "__main__.MyEnum*"
     """)  # noqa: E501
 
 
@@ -83,9 +83,9 @@ def test_timedelta_attribute():
         td_us = TimedeltaUsAttribute()
 
     m = MyModel()
-    reveal_type(m.td)  # E: Revealed type is 'datetime.timedelta*'
-    reveal_type(m.td_ms)  # E: Revealed type is 'datetime.timedelta*'
-    reveal_type(m.td_us)  # E: Revealed type is 'datetime.timedelta*'
+    reveal_type(m.td)  # E: Revealed type is "datetime.timedelta*"
+    reveal_type(m.td_ms)  # E: Revealed type is "datetime.timedelta*"
+    reveal_type(m.td_us)  # E: Revealed type is "datetime.timedelta*"
 
     m.save(condition=MyModel.td == timedelta(seconds=5))
     """)
@@ -103,9 +103,9 @@ def test_timestamp_attribute():
         ts_us = TimestampUsAttribute()
 
     m = MyModel()
-    reveal_type(m.ts)  # E: Revealed type is 'datetime.datetime*'
-    reveal_type(m.ts_ms)  # E: Revealed type is 'datetime.datetime*'
-    reveal_type(m.ts_us)  # E: Revealed type is 'datetime.datetime*'
+    reveal_type(m.ts)  # E: Revealed type is "datetime.datetime*"
+    reveal_type(m.ts_ms)  # E: Revealed type is "datetime.datetime*"
+    reveal_type(m.ts_us)  # E: Revealed type is "datetime.datetime*"
 
     m.save(condition=MyModel.ts == datetime.now())
     """)
@@ -119,6 +119,6 @@ def test_uuid_attribute():
     class MyModel(Model):
         my_attr = UUIDAttribute()
 
-    reveal_type(MyModel.my_attr)  # E: Revealed type is 'pynamodb_attributes.uuid.UUIDAttribute'
-    reveal_type(MyModel().my_attr)  # E: Revealed type is 'uuid.UUID*'
+    reveal_type(MyModel.my_attr)  # E: Revealed type is "pynamodb_attributes.uuid.UUIDAttribute"
+    reveal_type(MyModel().my_attr)  # E: Revealed type is "uuid.UUID*"
     """)
