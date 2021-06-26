@@ -141,3 +141,18 @@ def test_uuid_attribute():
     reveal_type(MyModel().my_attr)  # E: Revealed type is "uuid.UUID*"
     """,
     )
+
+
+def test_unicode_datetime():
+    assert_mypy_output(
+        """
+    from pynamodb.models import Model
+    from pynamodb_attributes import UnicodeDatetimeAttribute
+
+    class MyModel(Model):
+        my_attr = UnicodeDatetimeAttribute()
+
+    reveal_type(MyModel.my_attr)  # E: Revealed type is "pynamodb_attributes.unicode_datetime.UnicodeDatetimeAttribute"
+    reveal_type(MyModel().my_attr)  # E: Revealed type is "datetime.datetime*"
+    """,
+    )
