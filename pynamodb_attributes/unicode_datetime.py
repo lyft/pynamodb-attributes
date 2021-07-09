@@ -21,13 +21,14 @@ class UnicodeDatetimeAttribute(Attribute[datetime]):
 
     def __init__(
         self,
+        *,
         force_tz: bool = True,
         force_utc: bool = False,
         fmt: Optional[str] = None,
         **kwargs: Any,
-    ):
+    ) -> None:
         """
-        :param force_tz: If set it will add timezone info to the value if it does not have it
+        :param force_tz: If set it will add timezone info to the value if absent before serializing
         :param force_utc: If set it will normalize the datetime to UTC
         :param fmt: If set it will use this value to convert to and from the string representaion
         """
@@ -45,7 +46,7 @@ class UnicodeDatetimeAttribute(Attribute[datetime]):
         )
 
     def serialize(self, value: datetime) -> str:
-        if self._force_tz and value.utcoffset() is None:
+        if self._force_tz and value.tzinfo is None:
             value = value.replace(tzinfo=timezone.utc)
         if self._force_utc:
             value = value.astimezone(tz=timezone.utc)
