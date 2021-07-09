@@ -7,8 +7,8 @@ from typing import TypeVar
 import pynamodb.constants
 from pynamodb.attributes import Attribute
 
-T = TypeVar('T', bound=Tuple[Any, ...])
-_DEFAULT_FIELD_DELIMITER = '::'
+T = TypeVar("T", bound=Tuple[Any, ...])
+_DEFAULT_FIELD_DELIMITER = "::"
 
 
 class UnicodeDelimitedTupleAttribute(Attribute[T]):
@@ -29,7 +29,12 @@ class UnicodeDelimitedTupleAttribute(Attribute[T]):
 
     attr_type = pynamodb.constants.STRING
 
-    def __init__(self, tuple_type: Type[T], delimiter: str = _DEFAULT_FIELD_DELIMITER, **kwargs: Any) -> None:
+    def __init__(
+        self,
+        tuple_type: Type[T],
+        delimiter: str = _DEFAULT_FIELD_DELIMITER,
+        **kwargs: Any,
+    ) -> None:
         """
         :param tuple_type: The type of the tuple -- may be a named or plain tuple
         :param delimiter: The delimiter to separate the tuple elements
@@ -39,21 +44,27 @@ class UnicodeDelimitedTupleAttribute(Attribute[T]):
         self.delimiter = delimiter
 
     def deserialize(self, value: str) -> T:
-        fields = getattr(self.tuple_type, '_fields', None)
-        field_types = getattr(self.tuple_type, '_field_types', None)
+        fields = getattr(self.tuple_type, "_fields", None)
+        field_types = getattr(self.tuple_type, "_field_types", None)
         if fields and field_types:
             values = value.split(self.delimiter, maxsplit=len(fields))
-            return self.tuple_type(**{f: field_types[f](v) for f, v in zip(fields, values)})
+            return self.tuple_type(
+                **{f: field_types[f](v) for f, v in zip(fields, values)}
+            )
         else:
             return self.tuple_type(value.split(self.delimiter))
 
     def serialize(self, value: T) -> str:
         if not isinstance(value, self.tuple_type):
-            raise TypeError(f"value has invalid type '{type(value)}'; expected '{self.tuple_type}'")
+            raise TypeError(
+                f"value has invalid type '{type(value)}'; expected '{self.tuple_type}'",
+            )
         values: List[T] = list(value)
         while values and values[-1] is None:
             del values[-1]
         strings = [str(e) for e in values]
         if any(self.delimiter in s for s in strings):
-            raise ValueError(f"Tuple elements may not contain delimiter '{self.delimiter}'")
+            raise ValueError(
+                f"Tuple elements may not contain delimiter '{self.delimiter}'",
+            )
         return self.delimiter.join(strings)

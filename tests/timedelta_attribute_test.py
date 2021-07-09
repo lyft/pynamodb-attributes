@@ -20,7 +20,7 @@ class MyModel(Model):
     value_us = TimedeltaUsAttribute(null=True)
 
 
-@pytest.fixture(scope='module', autouse=True)
+@pytest.fixture(scope="module", autouse=True)
 def create_table():
     MyModel.create_table()
 
@@ -28,14 +28,17 @@ def create_table():
 def test_serialization_non_null(uuid_key):
     model = MyModel()
     model.key = uuid_key
-    model.value = model.value_ms = model.value_us = timedelta(seconds=456, microseconds=123456)
+    model.value = model.value_ms = model.value_us = timedelta(
+        seconds=456,
+        microseconds=123456,
+    )
     model.save()
 
     # verify underlying storage
     item = _connection(MyModel).get_item(uuid_key)
-    assert item['Item']['value'] == {'N': '456'}
-    assert item['Item']['value_ms'] == {'N': '456123'}
-    assert item['Item']['value_us'] == {'N': '456123456'}
+    assert item["Item"]["value"] == {"N": "456"}
+    assert item["Item"]["value_ms"] == {"N": "456123"}
+    assert item["Item"]["value_us"] == {"N": "456123456"}
 
     # verify deserialization
     model = MyModel.get(uuid_key)
@@ -54,9 +57,9 @@ def test_serialization_null(uuid_key):
 
     # verify underlying storage
     item = _connection(MyModel).get_item(uuid_key)
-    assert 'value' not in item['Item']
-    assert 'value_ms' not in item['Item']
-    assert 'value_us' not in item['Item']
+    assert "value" not in item["Item"]
+    assert "value_ms" not in item["Item"]
+    assert "value_us" not in item["Item"]
 
     # verify deserialization
     model = MyModel.get(uuid_key)
@@ -67,5 +70,5 @@ def test_serialization_null(uuid_key):
 
 def test_set_invalid_type():
     model = MyModel()
-    with pytest.raises(TypeError, match='invalid type'):
+    with pytest.raises(TypeError, match="invalid type"):
         model.value = 42

@@ -31,18 +31,22 @@ class MyModel(Model):
 
     key = UnicodeAttribute(hash_key=True)
     value = IntegerEnumAttribute(MyEnum, null=True)
-    value_with_unknown = IntegerEnumAttribute(MyEnum, unknown_value=MyEnum.unknown_key, null=True)
+    value_with_unknown = IntegerEnumAttribute(
+        MyEnum,
+        unknown_value=MyEnum.unknown_key,
+        null=True,
+    )
     value_with_missing = IntegerEnumAttribute(MyEnumWithMissing, null=True)
 
 
-@pytest.fixture(scope='module', autouse=True)
+@pytest.fixture(scope="module", autouse=True)
 def create_table():
     MyModel.create_table()
 
 
 def test_invalid_enum():
     class StringEnum(Enum):
-        foo_key = 'foo_value'
+        foo_key = "foo_value"
         bar_key = 2
 
     with pytest.raises(TypeError, match="values must be all ints"):
@@ -60,8 +64,9 @@ def test_serialization_invalid_type(uuid_key):
 
 def test_serialization_unknown_value_fail(uuid_key):
     _connection(MyModel).put_item(
-        uuid_key, attributes={
-            'value': {'N': '9001'},
+        uuid_key,
+        attributes={
+            "value": {"N": "9001"},
         },
     )
     with pytest.raises(ValueError, match="9001 is not a valid MyEnum"):
@@ -70,8 +75,9 @@ def test_serialization_unknown_value_fail(uuid_key):
 
 def test_serialization_unknown_value_success(uuid_key):
     _connection(MyModel).put_item(
-        uuid_key, attributes={
-            'value_with_unknown': {'N': '9001'},
+        uuid_key,
+        attributes={
+            "value_with_unknown": {"N": "9001"},
         },
     )
     model = MyModel.get(uuid_key)
@@ -80,8 +86,9 @@ def test_serialization_unknown_value_success(uuid_key):
 
 def test_serialization_missing_value_success(uuid_key):
     _connection(MyModel).put_item(
-        uuid_key, attributes={
-            'value_with_missing': {'N': '9001'},
+        uuid_key,
+        attributes={
+            "value_with_missing": {"N": "9001"},
         },
     )
     model = MyModel.get(uuid_key)
@@ -89,10 +96,11 @@ def test_serialization_missing_value_success(uuid_key):
 
 
 @pytest.mark.parametrize(
-    ['value', 'expected_attributes'], [
+    ["value", "expected_attributes"],
+    [
         (None, {}),
-        (MyEnum.foo_key, {'value': {'N': '1'}}),
-        (MyEnum.bar_key, {'value': {'N': '2'}}),
+        (MyEnum.foo_key, {"value": {"N": "1"}}),
+        (MyEnum.bar_key, {"value": {"N": "2"}}),
     ],
 )
 def test_serialization(value, expected_attributes, uuid_key):
@@ -103,7 +111,7 @@ def test_serialization(value, expected_attributes, uuid_key):
 
     # verify underlying storage
     item = _connection(MyModel).get_item(uuid_key)
-    assert item['Item'] == {'key': ANY, **expected_attributes}
+    assert item["Item"] == {"key": ANY, **expected_attributes}
 
     # verify deserialization
     model = MyModel.get(uuid_key)

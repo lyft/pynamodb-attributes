@@ -17,7 +17,7 @@ class MyModel(Model):
     value = IntegerDateAttribute(null=True)
 
 
-@pytest.fixture(scope='module', autouse=True)
+@pytest.fixture(scope="module", autouse=True)
 def create_table():
     MyModel.create_table()
 
@@ -30,7 +30,7 @@ def test_serialization_non_null(uuid_key):
 
     # verify underlying storage
     item = _connection(MyModel).get_item(uuid_key)
-    assert item['Item'] == {'key': ANY, 'value': {'N': '20151231'}}
+    assert item["Item"] == {"key": ANY, "value": {"N": "20151231"}}
 
     # verify deserialization
     model = MyModel.get(uuid_key)
@@ -47,7 +47,7 @@ def test_serialization_null(uuid_key):
 
     # verify underlying storage
     item = _connection(MyModel).get_item(uuid_key)
-    assert 'value' not in item['Item']
+    assert "value" not in item["Item"]
 
     # verify deserialization
     model = MyModel.get(uuid_key)
