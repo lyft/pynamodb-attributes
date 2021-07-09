@@ -8,6 +8,7 @@ from pynamodb_attributes import IntegerAttribute
 
 class IntegerDateAttribute(Attribute[date]):
     """Represents a date as an integer (e.g. 2015_12_31 for December 31st, 2015)."""
+
     attr_type = IntegerAttribute.attr_type
 
     def serialize(self, value: date) -> str:

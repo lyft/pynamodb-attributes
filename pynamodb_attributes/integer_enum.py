@@ -7,7 +7,7 @@ from typing import TypeVar
 import pynamodb.constants
 from pynamodb.attributes import Attribute
 
-T = TypeVar('T', bound=Enum)
+T = TypeVar("T", bound=Enum)
 _fail: Any = object()
 
 
@@ -28,9 +28,12 @@ class IntegerEnumAttribute(Attribute[T]):
     >>> class Shake(Model):
     >>>   flavor = IntegerEnumAttribute(ShakeFlavor)
     """
+
     attr_type = pynamodb.constants.NUMBER
 
-    def __init__(self, enum_type: Type[T], unknown_value: Optional[T] = _fail, **kwargs: Any) -> None:
+    def __init__(
+        self, enum_type: Type[T], unknown_value: Optional[T] = _fail, **kwargs: Any
+    ) -> None:
         """
         :param enum_type: The type of the enum
         """
@@ -50,5 +53,7 @@ class IntegerEnumAttribute(Attribute[T]):
 
     def serialize(self, value: T) -> str:
         if not isinstance(value, self.enum_type):
-            raise TypeError(f"value has invalid type '{type(value)}'; expected '{self.enum_type}'")
+            raise TypeError(
+                f"value has invalid type '{type(value)}'; expected '{self.enum_type}'",
+            )
         return str(value.value)

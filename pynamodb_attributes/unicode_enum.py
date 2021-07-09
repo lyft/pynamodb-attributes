@@ -7,7 +7,7 @@ from typing import TypeVar
 import pynamodb.constants
 from pynamodb.attributes import Attribute
 
-T = TypeVar('T', bound=Enum)
+T = TypeVar("T", bound=Enum)
 _fail: Any = object()
 
 
@@ -28,9 +28,12 @@ class UnicodeEnumAttribute(Attribute[T]):
     >>> class Shake(Model):
     >>>   flavor = UnicodeEnumAttribute(ShakeFlavor)
     """
+
     attr_type = pynamodb.constants.STRING
 
-    def __init__(self, enum_type: Type[T], unknown_value: Optional[T] = _fail, **kwargs: Any) -> None:
+    def __init__(
+        self, enum_type: Type[T], unknown_value: Optional[T] = _fail, **kwargs: Any
+    ) -> None:
         """
         :param enum_type: The type of the enum
         """
@@ -38,7 +41,9 @@ class UnicodeEnumAttribute(Attribute[T]):
         self.enum_type = enum_type
         self.unknown_value = unknown_value
         if not all(isinstance(e.value, str) for e in self.enum_type):
-            raise TypeError(f"Enumeration '{self.enum_type}' values must be all strings")
+            raise TypeError(
+                f"Enumeration '{self.enum_type}' values must be all strings",
+            )
 
     def deserialize(self, value: str) -> Optional[T]:
         try:
@@ -50,5 +55,7 @@ class UnicodeEnumAttribute(Attribute[T]):
 
     def serialize(self, value: T) -> str:
         if not isinstance(value, self.enum_type):
-            raise TypeError(f"value has invalid type '{type(value)}'; expected '{self.enum_type}'")
+            raise TypeError(
+                f"value has invalid type '{type(value)}'; expected '{self.enum_type}'",
+            )
         return value.value

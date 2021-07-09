@@ -22,7 +22,7 @@ class MyModel(Model):
     null_value = TimestampAttribute(null=True)
 
 
-@pytest.fixture(scope='module', autouse=True)
+@pytest.fixture(scope="module", autouse=True)
 def create_table():
     MyModel.create_table()
 
@@ -46,13 +46,13 @@ def test_serialization(uuid_key):
 
 def test_set_invalid_type():
     model = MyModel()
-    with pytest.raises(TypeError, match='invalid type'):
+    with pytest.raises(TypeError, match="invalid type"):
         model.value = 42
 
 
 def test_set_naive_datetime():
     model = MyModel()
-    with pytest.raises(TypeError, match='aware datetime expected'):
+    with pytest.raises(TypeError, match="aware datetime expected"):
         model.value = datetime.utcnow()
 
 

@@ -26,7 +26,7 @@ class UUIDAttribute(Attribute[UUID]):
         result = str(value)
 
         if self._remove_dashes:
-            result = result.replace('-', '')
+            result = result.replace("-", "")
 
         return result
 
