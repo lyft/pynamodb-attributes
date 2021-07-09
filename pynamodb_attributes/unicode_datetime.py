@@ -28,15 +28,17 @@ class UnicodeDatetimeAttribute(Attribute[datetime]):
         **kwargs: Any,
     ) -> None:
         """
-        :param force_tz: If set it will add timezone info to the value if absent before serializing
-        :param force_utc: If set it will normalize the datetime to UTC
-        :param fmt: If set it will use this value to convert to and from the string representaion
+        :param force_tz: If set it will add timezone info to the `datetime` value if no `tzinfo` is currently
+            set before serializing, defaults to `True`
+        :param force_utc: If set it will normalize the `datetime` to UTC before serializing the value
+        :param fmt: If set this value will be used to format the `datetime` object for serialization
+            and deserialization
         """
 
         super().__init__(**kwargs)
-        self._fmt = fmt
         self._force_tz = force_tz
         self._force_utc = force_utc
+        self._fmt = fmt
 
     def deserialize(self, value: str) -> datetime:
         return (
