@@ -8,7 +8,7 @@ from pynamodb.attributes import Attribute
 
 
 class TimestampAttribute(Attribute[datetime]):
-    """ "
+    """
     Stores time as a Unix epoch timestamp (in seconds) in a DynamoDB number.
 
     >>> class MyModel(Model):
@@ -37,7 +37,7 @@ class TimestampAttribute(Attribute[datetime]):
 
 
 class TimestampMsAttribute(TimestampAttribute):
-    """ "
+    """
     Stores time as a Unix epoch timestamp in milliseconds (ms) in a DynamoDB number.
     """
 
@@ -45,7 +45,7 @@ class TimestampMsAttribute(TimestampAttribute):
 
 
 class TimestampUsAttribute(TimestampAttribute):
-    """ "
+    """
     Stores times as a Unix epoch timestamp in microseconds (μs) in a DynamoDB number.
     """
 

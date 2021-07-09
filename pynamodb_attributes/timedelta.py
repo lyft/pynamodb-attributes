@@ -7,7 +7,7 @@ from pynamodb.attributes import Attribute
 
 
 class TimedeltaAttribute(Attribute[timedelta]):
-    """ "
+    """
     Stores a timedelta as a number of seconds (truncated).
 
     >>> class MyModel(Model):
@@ -33,7 +33,7 @@ class TimedeltaAttribute(Attribute[timedelta]):
 
 
 class TimedeltaMsAttribute(TimedeltaAttribute):
-    """ "
+    """
     Stores a timedelta as a number of milliseconds AKA ms (truncated).
     """
 
@@ -41,7 +41,7 @@ class TimedeltaMsAttribute(TimedeltaAttribute):
 
 
 class TimedeltaUsAttribute(TimedeltaAttribute):
-    """ "
+    """
     Stores a timedelta as a number of microseconds AKA μs (truncated).
     """
 
