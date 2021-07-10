@@ -45,14 +45,17 @@ class UnicodeDelimitedTupleAttribute(Attribute[T]):
         self.delimiter = delimiter
 
     def deserialize(self, value: str) -> T:
-        type_hints = get_type_hints(self.tuple_type)
+        field_types = get_type_hints(self.tuple_type)
 
-        if type_hints:
-            values = value.split(self.delimiter, maxsplit=len(type_hints))
+        if field_types:
+            values = value.split(self.delimiter, maxsplit=len(field_types))
             return self.tuple_type(
                 **{
-                    f: self._parse_value(v, type_hints[f])
-                    for f, v in zip(type_hints, values)
+                    field_name: self._parse_value(value, field_type)
+                    for (field_name, field_type), value in zip(
+                        field_types.items(),
+                        values,
+                    )
                 }
             )
         else:
