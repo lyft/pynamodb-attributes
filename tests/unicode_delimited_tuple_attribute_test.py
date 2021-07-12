@@ -1,6 +1,4 @@
 from typing import NamedTuple
-from typing import Optional
-from typing import Union
 from unittest.mock import ANY
 
 import pytest
@@ -15,12 +13,8 @@ from tests.meta import dynamodb_table_meta
 class MyTuple(NamedTuple):
     country: str
     city: str
-    zip_code: Optional[int] = None
-
-
-class MyUnionTuple(NamedTuple):
-    str_or_int_or_none: Union[None, str, int]
-    int_or_str: Union[int, str]
+    # should be Optional[int] but deserialization does not support it
+    zip_code: int = None  # type: ignore
 
 
 @pytest.fixture(scope="module", autouse=True)
@@ -35,7 +29,6 @@ class MyModel(Model):
     default_delimiter = UnicodeDelimitedTupleAttribute(MyTuple, null=True)
     custom_delimiter = UnicodeDelimitedTupleAttribute(MyTuple, delimiter=".", null=True)
     untyped = UnicodeDelimitedTupleAttribute(tuple, null=True)
-    union_type = UnicodeDelimitedTupleAttribute(MyUnionTuple, null=True)
 
 
 def test_serialization_containing_delimiter(uuid_key):
@@ -148,36 +141,3 @@ def test_serialization_untyped(expected_attributes, value, uuid_key):
     # verify deserialization
     model = MyModel.get(uuid_key)
     assert model.untyped == value
-
-
-@pytest.mark.parametrize(
-    ["raw_input", "expected"],
-    [
-        ({"union_type": {"S": "string::42"}}, MyUnionTuple("string", 42)),
-        (
-            {"union_type": {"S": "string::another_string"}},
-            MyUnionTuple("string", "another_string"),
-        ),
-    ],
-)
-def test_serialization_union_type(raw_input, expected, uuid_key):
-    _connection(MyModel).put_item(
-        hash_key=uuid_key,
-        attributes={"union_type": {"S": "string::42"}},
-    )
-
-    model = MyModel.get(hash_key=uuid_key)
-    assert model.union_type == MyUnionTuple("string", 42)
-
-
-def test_serialization_unparsable_raises(uuid_key):
-    _connection(MyModel).put_item(
-        hash_key=uuid_key,
-        attributes={"default_delimiter": {"S": "US::San Francisco::NOT_A_ZIP_CODE"}},
-    )
-    with pytest.raises(
-        ValueError,
-        match=r"Unable to parse value: 'NOT_A_ZIP_CODE' for any of the following "
-        r"types: '\[int, NoneType\]",
-    ):
-        MyModel.get(hash_key=uuid_key)

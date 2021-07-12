@@ -51,7 +51,7 @@ class UnicodeDelimitedTupleAttribute(Attribute[T]):
             values = value.split(self.delimiter, maxsplit=len(field_types))
             return self.tuple_type(
                 **{
-                    field_name: self._parse_value(value, field_type)
+                    field_name: field_type(value)
                     for (field_name, field_type), value in zip(
                         field_types.items(),
                         values,
@@ -75,20 +75,3 @@ class UnicodeDelimitedTupleAttribute(Attribute[T]):
                 f"Tuple elements may not contain delimiter '{self.delimiter}'",
             )
         return self.delimiter.join(strings)
-
-    def _parse_value(self, str_value: str, type_: Type[Any]) -> Any:
-        if hasattr(type_, "__args__"):
-            for t in type_.__args__:
-                if isinstance(None, t):
-                    continue
-                try:
-                    return t(str_value)
-                except ValueError:
-                    pass
-            list_of_types = ", ".join(t.__name__ for t in type_.__args__)
-            raise ValueError(
-                f"Unable to parse value: '{str_value}' for any of the "
-                f"following types: '[{list_of_types}]'",
-            )
-        else:
-            return type_(str_value)
