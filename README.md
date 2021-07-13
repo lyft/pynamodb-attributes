@@ -22,9 +22,12 @@ This Python 3 library contains compound and high-level PynamoDB attributes:
 
 ## Testing
 
-The tests in this repository use an in-memory implementation of [`dynamodb`](https://aws.amazon.com/dynamodb). To run the tests locally you can run the dynamodb local container like so:
+The tests in this repository use an in-memory implementation of [`dynamodb`](https://aws.amazon.com/dynamodb). To run the tests locally, make sure [DynamoDB Local](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.html) is running. It is available as a standalone binary, through package managers (e.g. [Homebrew](https://formulae.brew.sh/cask/dynamodb-local)) or as a Docker container:
 ```shell
 docker run -d -p 8000:8000 amazon/dynamodb-local
+    ```
 
-pytest ./tests
-```
+Afterwards, run tests as usual:
+```shell
+pytest tests
+    ```
