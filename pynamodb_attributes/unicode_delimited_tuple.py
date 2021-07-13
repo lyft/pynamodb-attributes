@@ -1,4 +1,5 @@
 from typing import Any
+from typing import get_type_hints
 from typing import List
 from typing import Tuple
 from typing import Type
@@ -44,12 +45,18 @@ class UnicodeDelimitedTupleAttribute(Attribute[T]):
         self.delimiter = delimiter
 
     def deserialize(self, value: str) -> T:
-        fields = getattr(self.tuple_type, "_fields", None)
-        field_types = getattr(self.tuple_type, "_field_types", None)
-        if fields and field_types:
-            values = value.split(self.delimiter, maxsplit=len(fields))
+        field_types = get_type_hints(self.tuple_type)
+
+        if field_types:
+            values = value.split(self.delimiter, maxsplit=len(field_types))
             return self.tuple_type(
-                **{f: field_types[f](v) for f, v in zip(fields, values)}
+                **{
+                    field_name: field_type(value)
+                    for (field_name, field_type), value in zip(
+                        field_types.items(),
+                        values,
+                    )
+                }
             )
         else:
             return self.tuple_type(value.split(self.delimiter))
