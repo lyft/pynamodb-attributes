@@ -8,6 +8,7 @@ from .timedelta import TimedeltaUsAttribute
 from .timestamp import TimestampAttribute
 from .timestamp import TimestampMsAttribute
 from .timestamp import TimestampUsAttribute
+from .unicode_datetime import UnicodeDatetimeAttribute
 from .unicode_delimited_tuple import UnicodeDelimitedTupleAttribute
 from .unicode_enum import UnicodeEnumAttribute
 from .uuid import UUIDAttribute
@@ -26,4 +27,5 @@ __all__ = [
     "TimestampMsAttribute",
     "TimestampUsAttribute",
     "UUIDAttribute",
+    "UnicodeDatetimeAttribute",
 ]
