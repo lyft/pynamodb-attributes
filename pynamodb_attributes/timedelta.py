@@ -21,8 +21,8 @@ class TimedeltaAttribute(Attribute[timedelta]):
     def deserialize(self, value: str) -> timedelta:
         return timedelta(microseconds=float(value) * (1000000.0 / self._multiplier))
 
-    def serialize(self, td: timedelta) -> int:
-        return int(td.total_seconds() * self._multiplier)
+    def serialize(self, td: timedelta) -> str:
+        return str(int(td.total_seconds() * self._multiplier))
 
     def __set__(self, instance: Any, value: Optional[Any]) -> None:
         if value is not None and not isinstance(value, timedelta):
