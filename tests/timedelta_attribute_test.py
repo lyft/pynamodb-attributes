@@ -3,6 +3,7 @@ from datetime import timedelta
 import pytest
 from pynamodb.attributes import UnicodeAttribute
 from pynamodb.models import Model
+from typing_extensions import assert_type
 
 from pynamodb_attributes import TimedeltaAttribute
 from pynamodb_attributes import TimedeltaMsAttribute
@@ -18,6 +19,11 @@ class MyModel(Model):
     value = TimedeltaAttribute(null=True)
     value_ms = TimedeltaMsAttribute(null=True)
     value_us = TimedeltaUsAttribute(null=True)
+
+
+assert_type(MyModel().value, timedelta)
+assert_type(MyModel().value_ms, timedelta)
+assert_type(MyModel().value_us, timedelta)
 
 
 @pytest.fixture(scope="module", autouse=True)

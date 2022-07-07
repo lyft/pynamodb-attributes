@@ -1,4 +1,4 @@
-mypy>=0.710
+mypy>=0.961
 pre-commit>=1.17.0
 pytest>=4.6.3
 pytest-cov>=2.7.1

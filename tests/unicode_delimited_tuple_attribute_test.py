@@ -1,9 +1,12 @@
+from typing import Any
 from typing import NamedTuple
+from typing import Tuple
 from unittest.mock import ANY
 
 import pytest
 from pynamodb.attributes import UnicodeAttribute
 from pynamodb.models import Model
+from typing_extensions import assert_type
 
 from pynamodb_attributes import UnicodeDelimitedTupleAttribute
 from tests.connection import _connection
@@ -29,6 +32,12 @@ class MyModel(Model):
     default_delimiter = UnicodeDelimitedTupleAttribute(MyTuple, null=True)
     custom_delimiter = UnicodeDelimitedTupleAttribute(MyTuple, delimiter=".", null=True)
     untyped = UnicodeDelimitedTupleAttribute(tuple, null=True)
+
+
+assert_type(MyModel.default_delimiter, UnicodeDelimitedTupleAttribute[MyTuple])
+assert_type(MyModel.untyped, UnicodeDelimitedTupleAttribute[Tuple[Any, ...]])
+assert_type(MyModel().default_delimiter, MyTuple)
+assert_type(MyModel().default_delimiter.country, str)
 
 
 def test_serialization_containing_delimiter(uuid_key):

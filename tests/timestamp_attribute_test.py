@@ -4,6 +4,7 @@ from datetime import timezone
 import pytest
 from pynamodb.attributes import UnicodeAttribute
 from pynamodb.models import Model
+from typing_extensions import assert_type
 
 from pynamodb_attributes import TimestampAttribute
 from pynamodb_attributes import TimestampMsAttribute
@@ -20,6 +21,11 @@ class MyModel(Model):
     value_us = TimestampUsAttribute()
 
     null_value = TimestampAttribute(null=True)
+
+
+assert_type(MyModel().value, datetime)
+assert_type(MyModel().value_ms, datetime)
+assert_type(MyModel().value_us, datetime)
 
 
 @pytest.fixture(scope="module", autouse=True)
