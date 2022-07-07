@@ -36,14 +36,14 @@ class MyModel(Model):
 
 assert_type(MyModel.default_delimiter, UnicodeDelimitedTupleAttribute[MyTuple])
 assert_type(MyModel.untyped, UnicodeDelimitedTupleAttribute[Tuple[Any, ...]])
-assert_type(MyModel().default_delimiter, MyTuple)
-assert_type(MyModel().default_delimiter.country, str)
 
 
 def test_serialization_containing_delimiter(uuid_key):
     model = MyModel()
     model.key = uuid_key
     model.default_delimiter = MyTuple(country="U::S", city="San Francisco")
+    assert_type(MyModel().default_delimiter, MyTuple)
+    assert_type(MyModel().default_delimiter.country, str)
 
     with pytest.raises(ValueError):
         model.save()
@@ -150,3 +150,5 @@ def test_serialization_untyped(expected_attributes, value, uuid_key):
     # verify deserialization
     model = MyModel.get(uuid_key)
     assert model.untyped == value
+
+    assert_type(MyModel.untyped, UnicodeDelimitedTupleAttribute[Tuple[Any, ...]])
