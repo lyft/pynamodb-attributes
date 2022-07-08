@@ -42,8 +42,9 @@ def test_serialization_containing_delimiter(uuid_key):
     model = MyModel()
     model.key = uuid_key
     model.default_delimiter = MyTuple(country="U::S", city="San Francisco")
-    assert_type(MyModel().default_delimiter, MyTuple)
-    assert_type(MyModel().default_delimiter.country, str)
+
+    assert_type(model.default_delimiter, MyTuple)
+    assert_type(model.default_delimiter.country, str)
 
     with pytest.raises(ValueError):
         model.save()
