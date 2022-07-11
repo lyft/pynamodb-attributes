@@ -4,6 +4,7 @@ from unittest.mock import ANY
 import pytest
 from pynamodb.attributes import UnicodeAttribute
 from pynamodb.models import Model
+from typing_extensions import assert_type
 
 from pynamodb_attributes import UnicodeDatetimeAttribute
 from tests.connection import _connection
@@ -30,6 +31,10 @@ class MyModel(Model):
         null=True,
     )
     custom_format = UnicodeDatetimeAttribute(fmt=CUSTOM_FORMAT, null=True)
+
+
+assert_type(MyModel.default, UnicodeDatetimeAttribute)
+assert_type(MyModel().default, datetime)
 
 
 @pytest.fixture(scope="module", autouse=True)

@@ -1,6 +1,7 @@
 import pytest
 from pynamodb.attributes import UnicodeAttribute
 from pynamodb.models import Model
+from typing_extensions import assert_type
 
 from pynamodb_attributes import IntegerAttribute
 from tests.connection import _connection
@@ -12,6 +13,10 @@ class MyModel(Model):
 
     key = UnicodeAttribute(hash_key=True)
     value = IntegerAttribute(null=True)
+
+
+assert_type(MyModel.value, IntegerAttribute)
+assert_type(MyModel().value, int)
 
 
 @pytest.fixture(scope="module", autouse=True)
