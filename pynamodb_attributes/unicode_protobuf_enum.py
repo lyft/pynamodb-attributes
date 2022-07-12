@@ -12,7 +12,7 @@ _TProtobufEnum = TypeVar("_TProtobufEnum", bound="_ProtobufEnum[Any]")
 
 
 # TODO: replace with built-in str.removeprefix once we're >=py3.9
-def _removeprefix(self: str, prefix: str) -> str:
+def _removeprefix(self: str, prefix: str) -> str:  # pragma: no cover
     if self.startswith(prefix):
         return self[len(prefix) :]
     else:

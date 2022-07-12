@@ -5,7 +5,7 @@ from typing import Optional
 from unittest.mock import ANY
 
 import pytest
-from pynamodb.attributes import UnicodeAttribute
+from pynamodb.attributes import UnicodeAttribute, MapAttribute
 from pynamodb.models import Model
 from typing_extensions import assert_type
 
@@ -55,6 +55,14 @@ class diner_pb2:
     SHAKE_FLAVOR_CHOCOLATE = cast(ShakeFlavor, 2)
 
 
+class MyMapAttr(MapAttribute):
+    value = UnicodeProtobufEnumAttribute(
+        diner_pb2.ShakeFlavor,
+        prefix="SHAKE_FLAVOR_",
+        null=True,
+    )
+
+
 class MyModel(Model):
     Meta = dynamodb_table_meta(__name__)
 
@@ -64,12 +72,19 @@ class MyModel(Model):
         prefix="SHAKE_FLAVOR_",
         null=True,
     )
+    value_upper = UnicodeProtobufEnumAttribute(
+        diner_pb2.ShakeFlavor,
+        prefix="SHAKE_FLAVOR_",
+        null=True,
+        lower=False,
+    )
     value_with_unknown = UnicodeProtobufEnumAttribute(
         diner_pb2.ShakeFlavor,
         unknown_value=diner_pb2.SHAKE_FLAVOR_UNKNOWN,
         prefix="SHAKE_FLAVOR_",
         null=True,
     )
+    map_attr = MyMapAttr(null=True)
 
 
 assert_type(MyModel().value, diner_pb2.ShakeFlavor)
@@ -118,8 +133,16 @@ def test_serialization_unknown_value_success(uuid_key):
     ["value", "expected_attributes"],
     [
         (None, {}),
-        (diner_pb2.SHAKE_FLAVOR_VANILLA, {"value": {"S": "vanilla"}}),
-        (diner_pb2.SHAKE_FLAVOR_CHOCOLATE, {"value": {"S": "chocolate"}}),
+        (diner_pb2.SHAKE_FLAVOR_VANILLA, {
+            "value": {"S": "vanilla"},
+            "value_upper": {"S": "VANILLA"},
+            "value_with_unknown": {"S": "vanilla"},
+        }),
+        (diner_pb2.SHAKE_FLAVOR_CHOCOLATE, {
+            "value": {"S": "chocolate"},
+            "value_upper": {"S": "CHOCOLATE"},
+            "value_with_unknown": {"S": "chocolate"},
+        }),
     ],
 )
 def test_serialization(
@@ -130,6 +153,8 @@ def test_serialization(
     model = MyModel()
     model.key = uuid_key
     model.value = value
+    model.value_upper = value
+    model.value_with_unknown = value
     model.save()
 
     # verify underlying storage
@@ -139,3 +164,18 @@ def test_serialization(
     # verify deserialization
     model = MyModel.get(uuid_key)
     assert model.value == value
+    assert model.value_upper == value
+    assert model.value_with_unknown == value
+
+
+def test_map_attribute(  # exercises the __deepcopy__ method
+    uuid_key: str,
+) -> None:
+    model = MyModel()
+    model.key = uuid_key
+    model.map_attr = MyMapAttr(value=diner_pb2.SHAKE_FLAVOR_VANILLA)
+    model.save()
+
+    # verify deserialization
+    model = MyModel.get(uuid_key)
+    assert model.map_attr.value == diner_pb2.SHAKE_FLAVOR_VANILLA
