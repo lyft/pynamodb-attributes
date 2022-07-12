@@ -4,6 +4,7 @@ from unittest.mock import ANY
 import pytest
 from pynamodb.attributes import UnicodeAttribute
 from pynamodb.models import Model
+from typing_extensions import assert_type
 
 from pynamodb_attributes import UnicodeEnumAttribute
 from tests.connection import _connection
@@ -37,6 +38,10 @@ class MyModel(Model):
         null=True,
     )
     value_with_missing = UnicodeEnumAttribute(MyEnumWithMissing, null=True)
+
+
+assert_type(MyModel.value, UnicodeEnumAttribute[MyEnum])
+assert_type(MyModel().value, MyEnum)
 
 
 @pytest.fixture(scope="module", autouse=True)
