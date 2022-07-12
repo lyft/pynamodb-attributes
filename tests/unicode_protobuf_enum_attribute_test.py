@@ -5,7 +5,8 @@ from typing import Optional
 from unittest.mock import ANY
 
 import pytest
-from pynamodb.attributes import UnicodeAttribute, MapAttribute
+from pynamodb.attributes import MapAttribute
+from pynamodb.attributes import UnicodeAttribute
 from pynamodb.models import Model
 from typing_extensions import assert_type
 
@@ -55,7 +56,7 @@ class diner_pb2:
     SHAKE_FLAVOR_CHOCOLATE = cast(ShakeFlavor, 2)
 
 
-class MyMapAttr(MapAttribute):
+class MyMapAttr(MapAttribute[Any, Any]):
     value = UnicodeProtobufEnumAttribute(
         diner_pb2.ShakeFlavor,
         prefix="SHAKE_FLAVOR_",
@@ -133,16 +134,22 @@ def test_serialization_unknown_value_success(uuid_key):
     ["value", "expected_attributes"],
     [
         (None, {}),
-        (diner_pb2.SHAKE_FLAVOR_VANILLA, {
-            "value": {"S": "vanilla"},
-            "value_upper": {"S": "VANILLA"},
-            "value_with_unknown": {"S": "vanilla"},
-        }),
-        (diner_pb2.SHAKE_FLAVOR_CHOCOLATE, {
-            "value": {"S": "chocolate"},
-            "value_upper": {"S": "CHOCOLATE"},
-            "value_with_unknown": {"S": "chocolate"},
-        }),
+        (
+            diner_pb2.SHAKE_FLAVOR_VANILLA,
+            {
+                "value": {"S": "vanilla"},
+                "value_upper": {"S": "VANILLA"},
+                "value_with_unknown": {"S": "vanilla"},
+            },
+        ),
+        (
+            diner_pb2.SHAKE_FLAVOR_CHOCOLATE,
+            {
+                "value": {"S": "chocolate"},
+                "value_upper": {"S": "CHOCOLATE"},
+                "value_with_unknown": {"S": "chocolate"},
+            },
+        ),
     ],
 )
 def test_serialization(
