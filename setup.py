@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name="pynamodb-attributes",
-    version="0.3.2",
+    version="0.4.0",
     description="Common attributes for PynamoDB",
     url="https://www.github.com/lyft/pynamodb-attributes",
     maintainer="Lyft",
