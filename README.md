@@ -2,6 +2,7 @@ This Python 3 library contains compound and high-level PynamoDB attributes:
 
 - `FloatAttribute` – same as `NumberAttribute` but whose value is typed as `float`
 - `IntegerAttribute` – same as `NumberAttribute` but whose value is typed as `int` (rather than `float`)
+- `IntegerSetAttribute` – same as `NumberSetAttribute` but whose value is typed as `int` (rather than `float`)
 - `UnicodeDelimitedTupleAttribute` - a delimiter-separated value, useful for storing composite keys
 - `UnicodeEnumAttribute` - serializes a string-valued `Enum` into a Unicode (`S`-typed) attribute
 - `UnicodeProtobufEnumAttribute` - serializes a Protobuf enum into a Unicode (`S`-typed) attribute

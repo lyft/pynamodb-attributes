@@ -1,5 +1,6 @@
 from .float import FloatAttribute
 from .integer import IntegerAttribute
+from .integer_set import IntegerSetAttribute
 from .integer_date import IntegerDateAttribute
 from .integer_enum import IntegerEnumAttribute
 from .timedelta import TimedeltaAttribute
@@ -16,6 +17,7 @@ from .uuid import UUIDAttribute
 __all__ = [
     "FloatAttribute",
     "IntegerAttribute",
+    "IntegerSetAttribute",
     "IntegerDateAttribute",
     "IntegerEnumAttribute",
     "UnicodeDelimitedTupleAttribute",
