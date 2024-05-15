@@ -50,7 +50,7 @@ class UnicodeProtobufEnumAttribute(Attribute[_TProtobufEnum]):
         enum_type: Type[_TProtobufEnum],
         *,
         unknown_value: Optional[_TProtobufEnum] = _fail,
-        prefix: str,
+        prefix: str = "",
         lower: bool = True,
         **kwargs: Any,
     ) -> None:

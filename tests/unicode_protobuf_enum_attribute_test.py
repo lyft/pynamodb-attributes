@@ -10,7 +10,7 @@ from pynamodb.attributes import UnicodeAttribute
 from pynamodb.models import Model
 from typing_extensions import assert_type
 
-from pynamodb_attributes.unicode_protobuf_enum import UnicodeProtobufEnumAttribute
+from pynamodb_attributes import UnicodeProtobufEnumAttribute
 from tests.connection import _connection
 from tests.meta import dynamodb_table_meta
 
@@ -85,6 +85,12 @@ class MyModel(Model):
         prefix="SHAKE_FLAVOR_",
         null=True,
     )
+    value_with_prefix = UnicodeProtobufEnumAttribute(
+        diner_pb2.ShakeFlavor,
+        unknown_value=diner_pb2.SHAKE_FLAVOR_UNKNOWN,
+        null=True,
+        lower=False,
+    )
     map_attr = MyMapAttr(null=True)
 
 
@@ -140,6 +146,7 @@ def test_serialization_unknown_value_success(uuid_key):
                 "value": {"S": "vanilla"},
                 "value_upper": {"S": "VANILLA"},
                 "value_with_unknown": {"S": "vanilla"},
+                "value_with_prefix": {"S": "SHAKE_FLAVOR_VANILLA"},
             },
         ),
         (
@@ -148,6 +155,7 @@ def test_serialization_unknown_value_success(uuid_key):
                 "value": {"S": "chocolate"},
                 "value_upper": {"S": "CHOCOLATE"},
                 "value_with_unknown": {"S": "chocolate"},
+                "value_with_prefix": {"S": "SHAKE_FLAVOR_CHOCOLATE"},
             },
         ),
     ],
@@ -162,6 +170,7 @@ def test_serialization(
     model.value = value
     model.value_upper = value
     model.value_with_unknown = value
+    model.value_with_prefix = value
     model.save()
 
     # verify underlying storage
@@ -173,6 +182,7 @@ def test_serialization(
     assert model.value == value
     assert model.value_upper == value
     assert model.value_with_unknown == value
+    assert model.value_with_prefix == value
 
 
 def test_map_attribute(  # exercises the __deepcopy__ method
