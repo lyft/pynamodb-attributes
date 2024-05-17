@@ -12,6 +12,7 @@ from .timestamp import TimestampUsAttribute
 from .unicode_datetime import UnicodeDatetimeAttribute
 from .unicode_delimited_tuple import UnicodeDelimitedTupleAttribute
 from .unicode_enum import UnicodeEnumAttribute
+from .unicode_protobuf_enum import UnicodeProtobufEnumAttribute
 from .uuid import UUIDAttribute
 
 __all__ = [
@@ -22,6 +23,7 @@ __all__ = [
     "IntegerEnumAttribute",
     "UnicodeDelimitedTupleAttribute",
     "UnicodeEnumAttribute",
+    "UnicodeProtobufEnumAttribute",
     "TimedeltaAttribute",
     "TimedeltaMsAttribute",
     "TimedeltaUsAttribute",
